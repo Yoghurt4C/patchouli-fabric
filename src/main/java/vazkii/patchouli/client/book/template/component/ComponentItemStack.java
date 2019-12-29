@@ -3,9 +3,8 @@ package vazkii.patchouli.client.book.template.component;
 import com.google.gson.annotations.SerializedName;
 import com.mojang.blaze3d.platform.GlStateManager;
 
-import net.minecraft.client.gui.AbstractGui;
+import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
 import vazkii.patchouli.api.VariableHolder;
 import vazkii.patchouli.client.book.BookEntry;
 import vazkii.patchouli.client.book.BookPage;
@@ -41,8 +40,8 @@ public class ComponentItemStack extends TemplateComponent {
 		if(framed) {
 			GlStateManager.enableBlend();
 			GlStateManager.color4f(1F, 1F, 1F, 1F);
-			page.mc.textureManager.bindTexture(page.book.craftingResource);
-			AbstractGui.blit(x - 4, y - 4, 83, 71, 24, 24, 128, 128);
+			page.mc.getTextureManager().bindTexture(page.book.craftingResource);
+			DrawableHelper.blit(x - 4, y - 4, 83, 71, 24, 24, 128, 128);
 		}
 		
 		page.parent.renderItemStack(x, y, mouseX, mouseY, items.get((page.parent.ticksInBook / 20) % items.size()));

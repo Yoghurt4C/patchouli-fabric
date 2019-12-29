@@ -2,7 +2,7 @@ package vazkii.patchouli.client.book.template.component;
 
 import com.google.gson.annotations.SerializedName;
 
-import net.minecraft.client.resources.I18n;
+import net.minecraft.client.resource.language.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
 import vazkii.patchouli.api.VariableHolder;
@@ -46,7 +46,7 @@ public class ComponentEntity extends TemplateComponent {
 	@Override
 	public void render(BookPage page, int mouseX, int mouseY, float pticks) {
 		if(errored)
-			page.fontRenderer.drawStringWithShadow(I18n.format("patchouli.gui.lexicon.loading_error"), x, y, 0xFF0000);
+			page.fontRenderer.drawWithShadow(I18n.translate("patchouli.gui.lexicon.loading_error"), x, y, 0xFF0000);
 		
 		if(entity != null)
 			renderEntity(page.mc.world, rotate ?  ClientTicker.total : defaultBlockRotation);

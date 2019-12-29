@@ -1,5 +1,6 @@
 package vazkii.patchouli.common.util;
 
+import net.minecraft.nbt.StringNbtReader;
 import net.minecraft.util.registry.Registry;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -8,11 +9,11 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.JsonToNBT;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
-import net.minecraftforge.registries.ForgeRegistries;
 import vazkii.patchouli.common.base.Patchouli;
+
+import java.util.Optional;
 
 public class EntityUtil {
 
@@ -31,17 +32,18 @@ public class EntityUtil {
 		
 		if(!nbtStr.isEmpty()) {
 			try {
-				nbt = JsonToNBT.getTagFromJson(nbtStr);
+				nbt = StringNbtReader.parse(nbtStr);
 			} catch(CommandSyntaxException e) {
 				Patchouli.LOGGER.error("Failed to load entity data", e);
 			}
 		}
 
 		Identifier key = new Identifier(entityId);
-		if (!ForgeRegistries.ENTITIES.containsKey(key)) {
+		Optional<EntityType<?>> maybeType = Registry.ENTITY_TYPE.getOrEmpty(key);
+		if (!maybeType.isPresent()) {
 			throw new RuntimeException("Unknown entity id: " + entityId);
 		}
-		EntityType<?> type = ForgeRegistries.ENTITIES.getValue(key);
+		EntityType<?> type = maybeType.get();
 		final CompoundTag useNbt = nbt;
 		final String useId = entityId;
 		return (world) -> {
@@ -49,7 +51,7 @@ public class EntityUtil {
 			try {
 				entity = type.create(world);
 				if(useNbt != null)
-					entity.read(useNbt);
+					entity.fromTag(useNbt);
 
 				return entity;
 			} catch (Exception e) {

@@ -6,7 +6,7 @@ import java.util.stream.Stream;
 
 import com.google.gson.annotations.SerializedName;
 
-import net.minecraft.client.resources.I18n;
+import net.minecraft.client.resource.language.I18n;
 import net.minecraft.util.Identifier;
 import vazkii.patchouli.common.base.PatchouliConfig;
 import vazkii.patchouli.common.book.Book;
@@ -31,7 +31,7 @@ public class BookCategory extends AbstractReadStateHolder implements Comparable<
 	private transient boolean built;
 
 	public String getName() {
-		return book.i18n ? I18n.format(name) : name;
+		return book.i18n ? I18n.translate(name) : name;
 	}
 
 	public String getDescription() {

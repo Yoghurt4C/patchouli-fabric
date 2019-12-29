@@ -8,16 +8,16 @@ import java.util.Map;
 
 import com.google.gson.annotations.SerializedName;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.renderer.model.ModelIdentifier;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.loader.api.ModContainer;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.font.FontManager;
+import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.util.ModelIdentifier;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Util;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.forgespi.language.IModInfo;
-import net.minecraftforge.common.MinecraftForge;
 import vazkii.patchouli.api.BookContentsReloadCallback;
 import vazkii.patchouli.client.book.BookContents;
 import vazkii.patchouli.client.book.BookEntry;
@@ -48,7 +48,7 @@ public class Book {
 
 	private transient boolean wasUpdated = false;
 	
-	public transient IModInfo owner;
+	public transient ModContainer owner;
 	public transient Class<?> ownerClass;
 	public transient Identifier resourceLoc;
 	public transient ModelIdentifier modelResourceLoc;
@@ -136,7 +136,7 @@ public class Book {
 	
 	public Map<String, String> macros = new HashMap<>();
 	
-	public void build(IModInfo owner,  Class<?> ownerClass, Identifier resource, boolean external) {
+	public void build(ModContainer owner,  Class<?> ownerClass, Identifier resource, boolean external) {
 		this.owner = owner;
 		this.ownerClass = ownerClass;
 		this.resourceLoc = resource;
@@ -214,7 +214,7 @@ public class Book {
 	
 		if(!isExtension) {
 			contents.reload(false);
-			MinecraftForge.EVENT_BUS.post(new BookContentsReloadCallback(this.bookResource));
+			BookContentsReloadCallback.EVENT.invoker().trigger(this.bookResource);
 		}
 	}
 	
@@ -238,7 +238,7 @@ public class Book {
 			}
 			
 			contents.reload(true);
-			MinecraftForge.EVENT_BUS.post(new BookContentsReloadCallback(this.bookResource));
+			BookContentsReloadCallback.EVENT.invoker().trigger(this.bookResource);
 		}
 	}
 	
@@ -252,12 +252,12 @@ public class Book {
 	}
 	
 	public String getOwnerName() {
-		return owner.getDisplayName();
+		return owner.getMetadata().getName();
 	}
 	
 	@Environment(EnvType.CLIENT)
-	public FontRenderer getFont() {
-		return useBlockyFont ? Minecraft.getInstance().fontRenderer : UnicodeFontHandler.getUnicodeFont();
+	public TextRenderer getFont() {
+		return useBlockyFont ? MinecraftClient.getInstance().textRenderer : UnicodeFontHandler.getUnicodeFont();
 	}
 	
 }

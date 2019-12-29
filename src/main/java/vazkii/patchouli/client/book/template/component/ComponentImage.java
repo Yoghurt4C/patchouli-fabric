@@ -3,7 +3,7 @@ package vazkii.patchouli.client.book.template.component;
 import com.google.gson.annotations.SerializedName;
 import com.mojang.blaze3d.platform.GlStateManager;
 
-import net.minecraft.client.gui.AbstractGui;
+import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.util.Identifier;
 import vazkii.patchouli.api.VariableHolder;
 import vazkii.patchouli.client.book.BookEntry;
@@ -38,13 +38,13 @@ public class ComponentImage extends TemplateComponent {
 		if(scale == 0F)
 			return;
 		
-		page.mc.textureManager.bindTexture(resource);
+		page.mc.getTextureManager().bindTexture(resource);
 		GlStateManager.pushMatrix();
 		GlStateManager.translatef(x, y, 0);
 		GlStateManager.scalef(scale, scale, scale);
 		GlStateManager.color4f(1F, 1F, 1F, 1F);
 		GlStateManager.enableBlend();
-		AbstractGui.blit(0, 0, u, v, width, height, textureWidth, textureHeight);
+		DrawableHelper.blit(0, 0, u, v, width, height, textureWidth, textureHeight);
 		GlStateManager.popMatrix();
 	}
 

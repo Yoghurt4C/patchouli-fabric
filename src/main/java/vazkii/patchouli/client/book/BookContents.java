@@ -16,15 +16,14 @@ import java.util.function.BiFunction;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
+import net.fabricmc.loader.api.ModContainer;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.resource.language.I18n;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
-import net.minecraftforge.fml.loading.moddiscovery.ModInfo;
-import net.minecraftforge.forgespi.language.IModInfo;
 import vazkii.patchouli.client.book.gui.GuiBook;
 import vazkii.patchouli.client.book.gui.GuiBookLanding;
 import vazkii.patchouli.client.book.template.BookTemplate;
@@ -80,11 +79,11 @@ public class BookContents extends AbstractReadStateHolder {
 
 	public void openLexiconGui(GuiBook gui, boolean push) {
 		if(gui.canBeOpened()) {
-			Minecraft mc = Minecraft.getInstance();
+			MinecraftClient mc = MinecraftClient.getInstance();
 			if(push && mc.currentScreen instanceof GuiBook && gui != mc.currentScreen)
 				guiStack.push((GuiBook) mc.currentScreen);
 
-			mc.displayGuiScreen(gui);
+			mc.openScreen(gui);
 			gui.onFirstOpened();
 		}
 	}
@@ -95,14 +94,14 @@ public class BookContents extends AbstractReadStateHolder {
 		try {
 			int ver = Integer.parseInt(book.version);
 			if(ver == 0)
-				return I18n.format(book.subtitle);
+				return I18n.translate(book.subtitle);
 
 			editionStr = numberToOrdinal(ver); 
 		} catch(NumberFormatException e) {
-			editionStr = I18n.format("patchouli.gui.lexicon.dev_edition");
+			editionStr = I18n.translate("patchouli.gui.lexicon.dev_edition");
 		}
 
-		return I18n.format("patchouli.gui.lexicon.edition_str", editionStr);
+		return I18n.translate("patchouli.gui.lexicon.edition_str", editionStr);
 	}
 
 	public void reload(boolean isOverride) {
@@ -164,11 +163,9 @@ public class BookContents extends AbstractReadStateHolder {
 	}
 
 	protected void findFiles(String dir, List<Identifier> list) {
-		IModInfo mod = book.owner;
-		if(mod instanceof ModInfo) {
-			String id = mod.getModId();
-			BookRegistry.findFiles((ModInfo) mod, String.format("data/%s/%s/%s/%s/%s", id, BookRegistry.BOOKS_LOCATION, book.resourceLoc.getPath(), DEFAULT_LANG, dir), null, pred(id, list), false, false);
-		}
+		ModContainer mod = book.owner;
+		String id = mod.getMetadata().getId();
+		BookRegistry.findFiles(mod, String.format("data/%s/%s/%s/%s/%s", id, BookRegistry.BOOKS_LOCATION, book.resourceLoc.getPath(), DEFAULT_LANG, dir), null, pred(id, list), false, false);
 	}
 	
 	private BiFunction<Path, Path, Boolean> pred(String modId, List<Identifier> list) {

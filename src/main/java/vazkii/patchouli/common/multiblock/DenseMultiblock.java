@@ -9,9 +9,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.TriPredicate;
 import vazkii.patchouli.api.IStateMatcher;
-import vazkii.patchouli.common.util.BlockRotationUtil;
+import vazkii.patchouli.api.TriPredicate;
+import vazkii.patchouli.common.util.RotationUtil;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -31,15 +31,15 @@ public class DenseMultiblock extends AbstractMultiblock {
 	}
 
 	@Override
-	public Pair<BlockPos, Collection<SimulateResult>> simulate(World world, BlockPos anchor, BlockRotation BlockRotation, boolean forView) {
+	public Pair<BlockPos, Collection<SimulateResult>> simulate(World world, BlockPos anchor, BlockRotation rotation, boolean forView) {
 		BlockPos center = forView
-				? anchor.add(BlockRotationUtil.x(BlockRotation, -viewOffX, -viewOffZ), -viewOffY + 1, BlockRotationUtil.z(BlockRotation, -viewOffX, -viewOffZ))
-				: anchor.add(BlockRotationUtil.x(BlockRotation, -offX, -offZ), -offY, BlockRotationUtil.z(BlockRotation, -offX, -offZ));
+				? anchor.add(RotationUtil.x(rotation, -viewOffX, -viewOffZ), -viewOffY + 1, RotationUtil.z(rotation, -viewOffX, -viewOffZ))
+				: anchor.add(RotationUtil.x(rotation, -offX, -offZ), -offY, RotationUtil.z(rotation, -offX, -offZ));
 		List<SimulateResult> ret = new ArrayList<>();
 		for(int x = 0; x < size.getX(); x++)
 			for(int y = 0; y < size.getY(); y++)
 				for(int z = 0; z < size.getZ(); z++) {
-					BlockPos actionPos = center.add(BlockRotationUtil.x(BlockRotation, x, z), y, BlockRotationUtil.z(BlockRotation, x, z));
+					BlockPos actionPos = center.add(RotationUtil.x(rotation, x, z), y, RotationUtil.z(rotation, x, z));
 					char currC = pattern[y][x].charAt(z);
 					ret.add(new SimulateResultImpl(actionPos, stateTargets[x][y][z], currC));
 				}
@@ -47,14 +47,14 @@ public class DenseMultiblock extends AbstractMultiblock {
 	}
 
 	@Override
-	public boolean test(World world, BlockPos start, int x, int y, int z, BlockRotation BlockRotation) {
+	public boolean test(World world, BlockPos start, int x, int y, int z, BlockRotation rotation) {
 		setWorld(world);
 		if (x < 0 || y < 0 || z < 0 || x >= size.getX() || y >= size.getY() || z >= size.getZ()) {
 			return false;
 		}
-		BlockPos checkPos = start.add(BlockRotationUtil.x(BlockRotation, x, z), y, BlockRotationUtil.z(BlockRotation, x, z));
+		BlockPos checkPos = start.add(RotationUtil.x(rotation, x, z), y, RotationUtil.z(rotation, x, z));
 		TriPredicate<BlockView, BlockPos, BlockState> pred = stateTargets[x][y][z].getStatePredicate();
-		BlockState state = world.getBlockState(checkPos).rotate(BlockRotationUtil.fixHorizontal(BlockRotation));
+		BlockState state = world.getBlockState(checkPos).rotate(RotationUtil.fixHorizontal(rotation));
 
 		return pred.test(world, checkPos, state);
 	}
@@ -144,7 +144,7 @@ public class DenseMultiblock extends AbstractMultiblock {
         if (x < 0 || y < 0 || z < 0 || x >= size.getX() || y >= size.getY() || z >= size.getZ()) {
             return Blocks.AIR.getDefaultState();
         }
-        int ticks = world != null ? (int) world.getDayTime() : 0;
+        int ticks = world != null ? (int) world.getTimeOfDay() : 0;
         return stateTargets[x][y][z].getDisplayedState(ticks);
     }
 

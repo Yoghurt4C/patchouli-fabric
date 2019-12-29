@@ -1,12 +1,8 @@
 package vazkii.patchouli.common.base;
 
+import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.SoundEvent;
 import net.minecraft.util.registry.Registry;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.registries.ForgeRegistries;
 
 public class PatchouliSounds {
 	
@@ -35,9 +31,7 @@ public class PatchouliSounds {
 	
 	public static SoundEvent getSound(String sound, SoundEvent fallback) {
 		Identifier key = new Identifier(sound);
-		return ForgeRegistries.SOUND_EVENTS.containsKey(key)
-				? ForgeRegistries.SOUND_EVENTS.getValue(key)
-				: fallback;
+		return Registry.SOUND_EVENT.getOrEmpty(key).orElse(fallback);
 	}
 	
 }

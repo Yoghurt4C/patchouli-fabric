@@ -47,7 +47,7 @@ import vazkii.patchouli.api.IStateMatcher;
 import vazkii.patchouli.client.base.ClientTicker;
 import vazkii.patchouli.client.base.PersistentData.DataHolder.BookData.Bookmark;
 import vazkii.patchouli.common.multiblock.StateMatcher;
-import vazkii.patchouli.common.util.BlockRotationUtil;
+import vazkii.patchouli.common.util.RotationUtil;
 
 @EventBusSubscriber(Dist.CLIENT)
 public class MultiblockVisualizationHandler {
@@ -351,7 +351,7 @@ public class MultiblockVisualizationHandler {
 	 * Returns the Rotation of a multiblock structure based on the given entity's facing direction.
 	 */
 	private static BlockRotation getBlockRotation(Entity entity) {
-		return BlockRotationUtil.BlockRotationFromFacing(Direction.byHorizontalIndex(MathHelper.floor((double) (-entity.BlockRotationYaw * 4.0F / 360.0F) + 0.5D) & 3));
+		return RotationUtil.BlockRotationFromFacing(Direction.byHorizontalIndex(MathHelper.floor((double) (-entity.BlockRotationYaw * 4.0F / 360.0F) + 0.5D) & 3));
 	}
 
 }

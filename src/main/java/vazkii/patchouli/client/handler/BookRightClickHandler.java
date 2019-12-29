@@ -2,6 +2,11 @@ package vazkii.patchouli.client.handler;
 
 import java.util.Collection;
 
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.util.TextFormat;
+import net.minecraft.client.util.Window;
+import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.util.hit.HitResult;
 import org.apache.commons.lang3.tuple.Pair;
 
 import com.mojang.blaze3d.platform.GlStateManager;
@@ -37,9 +42,9 @@ public class BookRightClickHandler {
 
 	@SubscribeEvent
 	public static void onRenderHUD(RenderGameOverlayEvent.Post event) {
-		Minecraft mc = Minecraft.getInstance();
+		MinecraftClient mc = MinecraftClient.getInstance();
 		PlayerEntity player = mc.player;
-		ItemStack bookStack = player.getHeldItemMainhand();
+		ItemStack bookStack = player.getMainHandStack();
 		if(event.getType() == ElementType.ALL && mc.currentScreen == null) {
 			Book book = getBookFromStack(bookStack);
 
@@ -48,20 +53,20 @@ public class BookRightClickHandler {
 				if(hover != null) {
 					BookEntry entry = hover.getLeft();
 					if(!entry.isLocked()) {
-						MainWindow window = event.getWindow();
+						Window window = mc.getWindow();
 						int x = window.getScaledWidth() / 2 + 3;
 						int y = window.getScaledHeight() / 2 + 3;
 						entry.getIcon().render(x, y);
 						GlStateManager.scalef(0.5F, 0.5F, 1F);
-						mc.getItemRenderer().renderItemAndEffectIntoGUI(bookStack, (x + 8) * 2, (y + 8) * 2);
+						mc.getItemRenderer().renderGuiItem(bookStack, (x + 8) * 2, (y + 8) * 2);
 						GlStateManager.scalef(2F, 2F, 1F);
 
-						mc.fontRenderer.drawStringWithShadow(entry.getName(), x + 18, y + 3, 0xFFFFFF);
+						mc.textRenderer.draw(entry.getName(), x + 18, y + 3, 0xFFFFFF);
 
 						GlStateManager.pushMatrix();
 						GlStateManager.scalef(0.75F, 0.75F, 1F);
 						String s = I18n.format("patchouli.gui.lexicon."+(player.isSneaking() ? "view" : "sneak"));
-                        mc.fontRenderer.drawStringWithShadow(TextFormatting.ITALIC + s, (x + 18) / 0.75F, (y + 14) / 0.75F, 0xBBBBBB);
+                        mc.textRenderer.draw(TextFormat.ITALIC + s, (x + 18) / 0.75F, (y + 14) / 0.75F, 0xBBBBBB);
                         GlStateManager.popMatrix();
 					}
 				}
@@ -72,7 +77,7 @@ public class BookRightClickHandler {
 	@SubscribeEvent
 	public static void onRightClick(RightClickBlock event) {
 		PlayerEntity player = event.getPlayer();
-		ItemStack bookStack = player.getHeldItemMainhand();
+		ItemStack bookStack = player.getMainHandStack();
 
 		if(event.getWorld().isRemote && player.isSneaking()) {
 			Book book = getBookFromStack(bookStack);
@@ -86,7 +91,7 @@ public class BookRightClickHandler {
 						int page = hover.getRight();
 						GuiBook curr = book.contents.getCurrentGui();
 						book.contents.currentGui = new GuiBookEntry(book, entry, page);
-						player.swingArm(Hand.MAIN_HAND);
+						player.swingHand(Hand.MAIN_HAND);
 
 						if(curr instanceof GuiBookEntry) {
 							GuiBookEntry currEntry = (GuiBookEntry) curr;
@@ -114,13 +119,13 @@ public class BookRightClickHandler {
 	}
 
 	private static Pair<BookEntry, Integer> getHoveredEntry(Book book) {
-		Minecraft mc = Minecraft.getInstance();
-		RayTraceResult res = mc.objectMouseOver;
-		if(res != null && res instanceof BlockRayTraceResult) {
-			BlockPos pos = ((BlockRayTraceResult) res).getPos();
+		MinecraftClient mc = MinecraftClient.getInstance();
+		HitResult res = mc.crosshairTarget;
+		if(res instanceof BlockHitResult) {
+			BlockPos pos = ((BlockHitResult) res).getBlockPos();
 			BlockState state = mc.world.getBlockState(pos);
 			Block block = state.getBlock();
-			ItemStack picked = block.getPickBlock(state, res, mc.world, pos, mc.player);
+			ItemStack picked = block.getPickStack(mc.world, pos, state);
 
 			if(!picked.isEmpty())
 				return book.contents.recipeMappings.get(ItemStackUtil.wrapStack(picked));

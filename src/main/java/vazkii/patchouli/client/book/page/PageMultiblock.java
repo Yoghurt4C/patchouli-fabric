@@ -6,9 +6,10 @@ import java.util.Set;
 import java.util.WeakHashMap;
 
 import javax.annotation.Nonnull;
-import javax.vecmath.Matrix4f;
-import javax.vecmath.Vector4f;
 
+import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.util.math.Matrix4f;
+import net.minecraft.client.util.math.Vector4f;
 import net.minecraft.util.math.Vec3i;
 import org.lwjgl.opengl.GL11;
 
@@ -19,22 +20,8 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.client.renderer.BlockRendererDispatcher;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.client.renderer.texture.AtlasTexture;
-import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.client.ForgeHooksClient;
-import net.minecraftforge.client.MinecraftForgeClient;
-import net.minecraftforge.client.model.data.EmptyModelData;
 import vazkii.patchouli.api.IMultiblock;
 import vazkii.patchouli.client.base.ClientTicker;
 import vazkii.patchouli.client.base.PersistentData;
@@ -63,7 +50,7 @@ public class PageMultiblock extends PageWithText {
 	boolean showVisualizeButton = true;
 	
 	private transient AbstractMultiblock multiblockObj;
-	private transient Button visualizeButton;
+	private transient ButtonWidget visualizeButton;
 	private final transient Random random = new Random();
 
 	@Override
@@ -111,7 +98,7 @@ public class PageMultiblock extends PageWithText {
 		super.render(mouseX, mouseY, pticks);
 	}
 	
-	public void handleButtonVisualize(Button button) {
+	public void handleButtonVisualize(ButtonWidget button) {
 		String entryKey = parent.getEntry().getResource().toString();
 		Bookmark bookmark = new Bookmark(entryKey, pageNum / 2);
 		MultiblockVisualizationHandler.setMultiblock(multiblockObj, name, bookmark, true);
@@ -145,7 +132,7 @@ public class PageMultiblock extends PageWithText {
 		// Initial eye pos somewhere off in the distance in the -Z direction
 		Vector4f eye = new Vector4f(0, 0, -100, 1);
 		Matrix4f rotMat = new Matrix4f();
-		rotMat.setIdentity();
+		rotMat.loadIdentity();
 
 		// For each GL rotation done, track the opposite to keep the eye pos accurate
 		GlStateManager.rotatef(-30F, 1F, 0F, 0F);
@@ -166,7 +153,7 @@ public class PageMultiblock extends PageWithText {
 		
 		// Finally apply the rotations
 		rotMat.transform(eye);
-		renderElements(multiblockObj, BlockPos.getAllInBoxMutable(BlockPos.ZERO, new BlockPos(sizeX - 1, sizeY - 1, sizeZ - 1)), eye);
+		renderElements(multiblockObj, BlockPos.iterate(BlockPos.ORIGIN, new BlockPos(sizeX - 1, sizeY - 1, sizeZ - 1)), eye);
 
 		GlStateManager.popMatrix();
 	}

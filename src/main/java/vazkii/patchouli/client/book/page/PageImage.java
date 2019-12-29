@@ -2,8 +2,8 @@ package vazkii.patchouli.client.book.page;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 
-import net.minecraft.client.gui.AbstractGui;
-import net.minecraft.client.gui.widget.button.Button;
+import net.minecraft.client.gui.DrawableHelper;
+import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.util.Identifier;
 import vazkii.patchouli.client.book.gui.GuiBook;
 import vazkii.patchouli.client.book.gui.GuiBookEntry;
@@ -35,7 +35,7 @@ public class PageImage extends PageWithText {
 	
 	@Override
 	public void render(int mouseX, int mouseY, float pticks) {
-		mc.textureManager.bindTexture(imageRes[index]);
+		mc.getTextureManager().bindTexture(imageRes[index]);
 		
 		int x = GuiBook.PAGE_WIDTH / 2 - 53;
 		int y = 7;
@@ -54,14 +54,14 @@ public class PageImage extends PageWithText {
 		if(images.length > 1 && border) {
 			int xs = x + 83;
 			int ys = y + 92;
-			AbstractGui.fill(xs, ys, xs + 20, ys + 11, 0x44000000);
-			AbstractGui.fill(xs - 1, ys - 1, xs + 20, ys + 11, 0x44000000);
+			DrawableHelper.fill(xs, ys, xs + 20, ys + 11, 0x44000000);
+			DrawableHelper.fill(xs - 1, ys - 1, xs + 20, ys + 11, 0x44000000);
 		}
 		
 		super.render(mouseX, mouseY, pticks);
 	}
 	
-	public void handleButtonArrow(Button button) {
+	public void handleButtonArrow(ButtonWidget button) {
 		boolean left = ((GuiButtonBookArrowSmall) button).left;
 		if(left)
 			index--;

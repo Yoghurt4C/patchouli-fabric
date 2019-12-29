@@ -2,7 +2,7 @@ package vazkii.patchouli.client.book.template.test;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.Recipe;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.util.Identifier;
@@ -12,7 +12,7 @@ import vazkii.patchouli.common.util.ItemStackUtil;
 
 public class RecipeTestProcessor implements IComponentProcessor {
 
-	private IRecipe<?> recipe;
+	private Recipe<?> recipe;
 	
 	@Override
 	public void setup(IVariableProvider<String> variables) {

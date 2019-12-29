@@ -2,13 +2,8 @@ package vazkii.patchouli.common.multiblock;
 
 import java.util.HashMap;
 
-import net.minecraft.block.Blocks;
-import net.minecraft.block.material.Material;
 import net.minecraft.util.Identifier;
 import vazkii.patchouli.api.IMultiblock;
-import vazkii.patchouli.api.PatchouliAPI;
-import vazkii.patchouli.api.PatchouliAPI.IPatchouliAPI;
-import vazkii.patchouli.common.base.Patchouli;
 
 public class MultiblockRegistry {
 

@@ -73,7 +73,7 @@ public interface IMultiblock {
 	/**
 	 * Places the multiblock at the given position with the given rotation.
 	 */
-	public void place(World world, BlockPos pos, BlockRotation BlockRotation);
+	public void place(World world, BlockPos pos, BlockRotation rotation);
 
 	/**
 	 * If this multiblock were anchored at world position {@code anchor} with rotation {@code rotation}, then
@@ -83,7 +83,7 @@ public interface IMultiblock {
 	 * This is intended to be highly general, most of the other methods below are implemented in terms of this one.
 	 * See the main Patchouli code to see what can be done with this.
 	 */
-	Pair<BlockPos, Collection<SimulateResult>> simulate(World world, BlockPos anchor, BlockRotation BlockRotation, boolean forView);
+	Pair<BlockPos, Collection<SimulateResult>> simulate(World world, BlockPos anchor, BlockRotation rotation, boolean forView);
 
 	/**
 	 * Validates if the multiblock exists at the given position. Will check all 4
@@ -96,14 +96,14 @@ public interface IMultiblock {
 	/**
 	 * Validates the multiblock for a specific rotation
 	 */
-	public boolean validate(World world, BlockPos pos, BlockRotation BlockRotation);
+	public boolean validate(World world, BlockPos pos, BlockRotation rotation);
 
 	/**
 	 * Fine-grained check for whether any one given block of the multiblock exists at the given position
 	 * with the given rotation.
 	 * @param start The anchor position. The multiblock's {@link #offset} is not applied to this.
 	 */
-	public boolean test(World world, BlockPos start, int x, int y, int z, BlockRotation BlockRotation);
+	public boolean test(World world, BlockPos start, int x, int y, int z, BlockRotation rotation);
 
 	interface SimulateResult {
 		/**
@@ -125,7 +125,7 @@ public interface IMultiblock {
 		/**
 		 * @return Whether the multiblock is fulfilled at this position
 		 */
-		public boolean test(World world, BlockRotation BlockRotation);
+		public boolean test(World world, BlockRotation rotation);
 	}
 
 }

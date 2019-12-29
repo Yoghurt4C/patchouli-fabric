@@ -6,7 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import net.minecraft.client.resources.I18n;
+import net.minecraft.client.resource.language.I18n;
+import net.minecraft.util.ChatUtil;
 import org.apache.commons.lang3.tuple.Pair;
 
 import com.google.common.collect.ImmutableList;
@@ -14,7 +15,6 @@ import com.google.gson.annotations.SerializedName;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.StringUtils;
 import vazkii.patchouli.client.base.ClientAdvancements;
 import vazkii.patchouli.client.base.PersistentData;
 import vazkii.patchouli.client.base.PersistentData.DataHolder.BookData;
@@ -59,7 +59,7 @@ public class BookEntry extends AbstractReadStateHolder implements Comparable<Boo
 	private transient boolean built;
 
 	public String getName() {
-		return book.i18n ? I18n.format(name) : name;
+		return book.i18n ? I18n.translate(name) : name;
 	}
 
 	public List<BookPage> getPages() {
@@ -150,7 +150,7 @@ public class BookEntry extends AbstractReadStateHolder implements Comparable<Boo
 			return true;
 		
 		for(StackWrapper wrapper : relevantStacks)
-			if(StringUtils.stripControlCodes(wrapper.stack.getDisplayName().getFormattedText()).toLowerCase().contains(query))
+			if(ChatUtil.stripTextFormat(wrapper.stack.getName().asFormattedString()).toLowerCase().contains(query))
 				return true;
 		
 		return false;

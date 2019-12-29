@@ -4,9 +4,7 @@ import com.google.gson.annotations.SerializedName;
 import com.mojang.blaze3d.platform.GLX;
 import com.mojang.blaze3d.platform.GlStateManager;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.resources.I18n;
+import net.minecraft.client.resource.language.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
 import vazkii.patchouli.client.base.ClientTicker;
@@ -67,7 +65,7 @@ public class PageEntity extends PageWithText {
 		parent.drawCenteredStringNoShadow(name, GuiBook.PAGE_WIDTH / 2, 0, book.headerColor);
 
 		if(errored)
-			fontRenderer.drawStringWithShadow(I18n.format("patchouli.gui.lexicon.loading_error"), 58, 60, 0xFF0000);
+			fontRenderer.drawWithShadow(I18n.translate("patchouli.gui.lexicon.loading_error"), 58, 60, 0xFF0000);
 
 		if(entity != null)
 			renderEntity(parent.getMinecraft().world, rotate ? ClientTicker.total : defaultBlockRotation);
@@ -118,7 +116,7 @@ public class PageEntity extends PageWithText {
 				offset = Math.max(height, entitySize) * 0.5F + extraOffset;
 
 				if(name == null || name.isEmpty())
-					name = entity.getName().getFormattedText();
+					name = entity.getName().asFormattedString();
 			} catch(Exception e) {
 				errored = true;
 				Patchouli.LOGGER.error("Failed to load entity", e);

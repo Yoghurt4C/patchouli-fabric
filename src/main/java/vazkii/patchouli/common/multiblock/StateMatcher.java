@@ -8,13 +8,13 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.BlockView;
-import net.minecraftforge.common.util.TriPredicate;
 import vazkii.patchouli.api.IStateMatcher;
+import vazkii.patchouli.api.TriPredicate;
 
 public class StateMatcher implements IStateMatcher {
 
 	public static final StateMatcher ANY = displayOnly(Blocks.AIR.getDefaultState());
-	public static final StateMatcher AIR = fromPredicate(Blocks.AIR.getDefaultState(), (w, p, s) -> s.isAir(w, p));
+	public static final StateMatcher AIR = fromPredicate(Blocks.AIR.getDefaultState(), (w, p, s) -> s.isAir());
 
 	private final BlockState displayState;
 	private final TriPredicate<BlockView, BlockPos, BlockState> statePredicate;

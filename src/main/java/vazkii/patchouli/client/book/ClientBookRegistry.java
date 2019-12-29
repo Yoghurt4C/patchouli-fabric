@@ -13,7 +13,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonPrimitive;
 
-import net.minecraft.client.Minecraft;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.Identifier;
 import vazkii.patchouli.client.book.page.PageCrafting;
 import vazkii.patchouli.client.book.page.PageEmpty;
@@ -69,7 +69,7 @@ public class ClientBookRegistry {
 	}
 
 	public void reload() {
-		currentLang = Minecraft.getInstance().getLanguageManager().getCurrentLanguage().getCode();
+		currentLang = MinecraftClient.getInstance().getLanguageManager().getLanguage().getCode();
 		if(firstLoad)
 			/* preload to avoid lag spike when opening book. This happens in the first reload when logging
 			   in, so the user shouldn't notice it as much. */
@@ -83,7 +83,7 @@ public class ClientBookRegistry {
 	}
 	
 	public void displayBookGui(String bookStr) {
-		currentLang = Minecraft.getInstance().getLanguageManager().getCurrentLanguage().getCode();
+		currentLang = MinecraftClient.getInstance().getLanguageManager().getLanguage().getCode();
 		
 		Identifier res = new Identifier(bookStr);
 		Book book = BookRegistry.INSTANCE.books.get(res);

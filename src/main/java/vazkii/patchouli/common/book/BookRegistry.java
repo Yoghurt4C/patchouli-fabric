@@ -11,13 +11,16 @@ import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.function.BiFunction;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.loader.api.FabricLoader;
+import net.fabricmc.loader.api.ModContainer;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -26,12 +29,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import net.minecraft.util.Identifier;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.ModContainer;
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.loading.moddiscovery.ModInfo;
-import net.minecraftforge.forgespi.language.IModInfo;
 import vazkii.patchouli.client.book.ClientBookRegistry;
 import vazkii.patchouli.common.base.Patchouli;
 
@@ -50,11 +47,11 @@ public class BookRegistry {
 	}
 
 	public void init() {
-		List<ModInfo> mods = ModList.get().getMods();
-		Map<Pair<ModInfo, Identifier>, String> foundBooks = new HashMap<>();
+		Collection<ModContainer> mods = FabricLoader.getInstance().getAllMods();
+		Map<Pair<ModContainer, Identifier>, String> foundBooks = new HashMap<>();
 
 		mods.forEach(mod -> {
-			String id = mod.getModId();
+			String id = mod.getMetadata().getId();
 			findFiles(mod, String.format("data/%s/%s", id, BOOKS_LOCATION), (path) -> Files.exists(path),
 					(path, file) -> {
 						if (file.toString().endsWith("book.json")) {
@@ -78,21 +75,18 @@ public class BookRegistry {
 		});
 
 		foundBooks.forEach((pair, file) -> {
-			ModInfo mod = pair.getLeft();
-			Optional<? extends ModContainer> container = ModList.get().getModContainerById(mod.getModId());
-			container.ifPresent(c -> {
-				Identifier res = pair.getRight();
+			ModContainer mod = pair.getLeft();
+			Identifier res = pair.getRight();
 
-				Class<?> ownerClass = c.getMod().getClass();
-				InputStream stream = ownerClass.getResourceAsStream(file);
-				loadBook(mod, ownerClass, res, stream, false);
-			});
+			Class<?> ownerClass = c.getMod().getClass();
+			InputStream stream = ownerClass.getResourceAsStream(file);
+			loadBook(mod, ownerClass, res, stream, false);
 		});
 
 		BookFolderLoader.findBooks();
 	}
 
-	public void loadBook(IModInfo mod, Class<?> ownerClass, Identifier res, InputStream stream,
+	public void loadBook(ModContainer mod, Class<?> ownerClass, Identifier res, InputStream stream,
 			boolean external) {
 		Reader reader = new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_8));
 		Book book = gson.fromJson(reader, Book.class);
@@ -115,12 +109,12 @@ public class BookRegistry {
 
 	// HELPER
 
-	public static boolean findFiles(ModInfo mod, String base, Function<Path, Boolean> preprocessor,
+	public static boolean findFiles(ModContainer mod, String base, Function<Path, Boolean> preprocessor,
 			BiFunction<Path, Path, Boolean> processor, boolean defaultUnfoundRoot, boolean visitAllFiles) {
-		if (mod.getModId().equals("minecraft") || mod.getModId().equals("forge"))
+		if (mod.getMetadata().getId().equals("minecraft"))
 			return false;
 
-		File source = mod.getOwningFile().getFile().getFilePath().toFile();
+		File source = mod.getRootPath().toFile();
 
 		FileSystem fs = null;
 		boolean success = true;

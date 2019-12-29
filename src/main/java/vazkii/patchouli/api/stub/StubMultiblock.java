@@ -48,12 +48,12 @@ public class StubMultiblock implements IMultiblock {
 	}
 
 	@Override
-	public void place(World world, BlockPos pos, BlockRotation BlockRotation) {
+	public void place(World world, BlockPos pos, BlockRotation rotation) {
 		// NO-OP
 	}
 
 	@Override
-	public Pair<BlockPos, Collection<SimulateResult>> simulate(World world, BlockPos anchor, BlockRotation BlockRotation, boolean forView) {
+	public Pair<BlockPos, Collection<SimulateResult>> simulate(World world, BlockPos anchor, BlockRotation rotation, boolean forView) {
 		return Pair.of(BlockPos.ORIGIN, Collections.emptyList());
 	}
 
@@ -63,12 +63,12 @@ public class StubMultiblock implements IMultiblock {
 	}
 
 	@Override
-	public boolean validate(World world, BlockPos pos, BlockRotation BlockRotation) {
+	public boolean validate(World world, BlockPos pos, BlockRotation rotation) {
 		return false;
 	}
 
 	@Override
-	public boolean test(World world, BlockPos start, int x, int y, int z, BlockRotation BlockRotation) {
+	public boolean test(World world, BlockPos start, int x, int y, int z, BlockRotation rotation) {
 		return false;
 	}
 
