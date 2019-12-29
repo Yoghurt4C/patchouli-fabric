@@ -6,7 +6,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 /**
  * A provider of variables to a template. Usually from json.
  */
-@OnlyIn(Dist.CLIENT)
+@Environment(EnvType.CLIENT)
 public interface IVariableProvider<T> {
 
 	/**

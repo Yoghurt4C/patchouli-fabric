@@ -63,9 +63,9 @@ public class PatchouliAPI {
 		/**
 		 * Opens a book GUI. (client version)
 		 */
-		@OnlyIn(Dist.CLIENT) public void openBookGUI(Identifier book);
+		@Environment(EnvType.CLIENT) public void openBookGUI(Identifier book);
 		
-		@OnlyIn(Dist.CLIENT) public Identifier getOpenBookGui();
+		@Environment(EnvType.CLIENT) public Identifier getOpenBookGui();
 		
 		/**
 		 * Reloads the contents of all books. Call sparingly and only if you
@@ -83,7 +83,7 @@ public class PatchouliAPI {
 		 * as the "res" resource location. The supplier should give an input stream that
 		 * reads a full json file, containing a template.
 		 */
-		@OnlyIn(Dist.CLIENT) public void registerTemplateAsBuiltin(Identifier res, Supplier<InputStream> streamProvider);
+		@Environment(EnvType.CLIENT) public void registerTemplateAsBuiltin(Identifier res, Supplier<InputStream> streamProvider);
 
 		// ================================================================================================
 		// ItemStack Serialization

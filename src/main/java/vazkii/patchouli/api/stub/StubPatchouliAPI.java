@@ -47,13 +47,13 @@ public class StubPatchouliAPI implements IPatchouliAPI {
 	}
 	
 	@Override
-	@OnlyIn(Dist.CLIENT)
+	@Environment(EnvType.CLIENT)
 	public void openBookGUI(Identifier book) {
 		// NO-OP
 	}
 	
 	@Override
-	@OnlyIn(Dist.CLIENT)
+	@Environment(EnvType.CLIENT)
 	public Identifier getOpenBookGui() {
 		return null;
 	}

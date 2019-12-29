@@ -62,13 +62,13 @@ public class PatchouliAPIImpl implements IPatchouliAPI {
 	}
 	
 	@Override
-	@OnlyIn(Dist.CLIENT)
+	@Environment(EnvType.CLIENT)
 	public void openBookGUI(Identifier book) {
 		ClientBookRegistry.INSTANCE.displayBookGui(book.toString());
 	}
 	
 	@Override
-	@OnlyIn(Dist.CLIENT)
+	@Environment(EnvType.CLIENT)
 	public Identifier getOpenBookGui() {
 		Screen gui = Minecraft.getInstance().currentScreen;
 		if (gui instanceof GuiBook)

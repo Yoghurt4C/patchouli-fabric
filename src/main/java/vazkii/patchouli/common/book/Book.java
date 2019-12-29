@@ -188,7 +188,7 @@ public class Book {
 		return bookItem;
 	}
 	
-	@OnlyIn(Dist.CLIENT)
+	@Environment(EnvType.CLIENT)
 	public void markUpdated() {
 		wasUpdated = true;
 	}
@@ -199,7 +199,7 @@ public class Book {
 		return updated;
 	}
 	
-	@OnlyIn(Dist.CLIENT)
+	@Environment(EnvType.CLIENT)
 	public void reloadContentsAndExtensions() {
 		reloadContents();
 
@@ -207,7 +207,7 @@ public class Book {
 			b.reloadExtensionContents();
 	}
 	
-	@OnlyIn(Dist.CLIENT)
+	@Environment(EnvType.CLIENT)
 	public void reloadContents() {
 		if(contents == null)
 			contents = isExternal ? new ExternalBookContents(this) : new BookContents(this);
@@ -218,7 +218,7 @@ public class Book {
 		}
 	}
 	
-	@OnlyIn(Dist.CLIENT)
+	@Environment(EnvType.CLIENT)
 	public void reloadExtensionContents() {
 		if(isExtension) {
 			if(extensionTarget == null) {
@@ -242,7 +242,7 @@ public class Book {
 		}
 	}
 	
-	@OnlyIn(Dist.CLIENT)
+	@Environment(EnvType.CLIENT)
 	public void reloadLocks(boolean reset) {
 		contents.entries.values().forEach(BookEntry::updateLockStatus);
 		contents.categories.values().forEach((c) -> c.updateLockStatus(true));
@@ -255,7 +255,7 @@ public class Book {
 		return owner.getDisplayName();
 	}
 	
-	@OnlyIn(Dist.CLIENT)
+	@Environment(EnvType.CLIENT)
 	public FontRenderer getFont() {
 		return useBlockyFont ? Minecraft.getInstance().fontRenderer : UnicodeFontHandler.getUnicodeFont();
 	}

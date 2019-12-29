@@ -23,7 +23,7 @@ public class PatchouliItems {
 	public static Item book;
 
 	@SubscribeEvent
-	@OnlyIn(Dist.CLIENT)
+	@Environment(EnvType.CLIENT)
 	public static void registerModels(ModelRegistryEvent event) {
 		BookRegistry.INSTANCE.books.values().forEach(b -> {
 			ModelLoader.addSpecialModel(new ModelIdentifier(b.model, "inventory"));
@@ -31,7 +31,7 @@ public class PatchouliItems {
 	}
 
 	@SubscribeEvent
-	@OnlyIn(Dist.CLIENT)
+	@Environment(EnvType.CLIENT)
 	public static void replaceModel(ModelBakeEvent event) {
 		ModelIdentifier key = new ModelIdentifier(book.getRegistryName(), "inventory");
 		IBakedModel oldModel = event.getModelRegistry().get(key);

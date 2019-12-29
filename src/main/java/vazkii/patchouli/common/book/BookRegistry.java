@@ -101,7 +101,7 @@ public class BookRegistry {
 		book.build(mod, ownerClass, res, external);
 	}
 
-	@OnlyIn(Dist.CLIENT)
+	@Environment(EnvType.CLIENT)
 	public void reloadContents() {
 		books.values().forEach(Book::reloadContents);
 		books.values().forEach(Book::reloadExtensionContents);

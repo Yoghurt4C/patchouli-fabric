@@ -48,7 +48,7 @@ public class ItemModBook extends Item {
 
 		addPropertyOverride(new Identifier("completion"), new IItemPropertyGetter() {
 			
-			@OnlyIn(Dist.CLIENT)
+			@Environment(EnvType.CLIENT)
 			public float call(ItemStack stack, @Nullable World worldIn, @Nullable LivingEntity entityIn) {
 				Book book = getBook(stack);
 				float progression = 0F; // default incomplete
@@ -125,7 +125,7 @@ public class ItemModBook extends Item {
 	}
 
 	@Override
-	@OnlyIn(Dist.CLIENT)
+	@Environment(EnvType.CLIENT)
 	public void addInformation(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
 		super.addInformation(stack, worldIn, tooltip, flagIn);
 
