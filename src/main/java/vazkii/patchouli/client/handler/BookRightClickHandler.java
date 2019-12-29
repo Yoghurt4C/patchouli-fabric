@@ -2,11 +2,14 @@ package vazkii.patchouli.client.handler;
 
 import java.util.Collection;
 
+import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.TextFormat;
 import net.minecraft.client.util.Window;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
+import net.minecraft.world.World;
 import org.apache.commons.lang3.tuple.Pair;
 
 import com.mojang.blaze3d.platform.GlStateManager;
@@ -74,12 +77,15 @@ public class BookRightClickHandler {
 		}
 	}
 
-	@SubscribeEvent
-	public static void onRightClick(RightClickBlock event) {
-		PlayerEntity player = event.getPlayer();
+	// todo fabric call this from somewhere
+	public static void init() {
+		UseBlockCallback.EVENT.register(BookRightClickHandler::onRightClick);
+	}
+
+	private static ActionResult onRightClick(PlayerEntity player, World world, Hand hand, BlockHitResult hit) {
 		ItemStack bookStack = player.getMainHandStack();
 
-		if(event.getWorld().isRemote && player.isSneaking()) {
+		if(world.isClient && player.isSneaking()) {
 			Book book = getBookFromStack(bookStack);
 
 			if(book != null) {
@@ -96,14 +102,16 @@ public class BookRightClickHandler {
 						if(curr instanceof GuiBookEntry) {
 							GuiBookEntry currEntry = (GuiBookEntry) curr;
 							if(currEntry.getEntry() == entry && currEntry.getPage() == page)
-								return;
+								return ActionResult.SUCCESS;
 						}
 
 						book.contents.guiStack.push(curr);
+						return ActionResult.SUCCESS;
 					}
 				}
 			}
 		}
+		return ActionResult.PASS;
 	}
 
 	private static Book getBookFromStack(ItemStack stack) {
