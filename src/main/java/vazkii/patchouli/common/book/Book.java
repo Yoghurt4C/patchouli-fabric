@@ -10,9 +10,9 @@ import com.google.gson.annotations.SerializedName;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.renderer.model.ModelResourceLocation;
+import net.minecraft.client.renderer.model.ModelIdentifier;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.Util;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -31,7 +31,7 @@ import vazkii.patchouli.common.util.ItemStackUtil;
 public class Book {
 	
 	public static final String DEFAULT_MODEL = Patchouli.PREFIX + "book_brown";
-	public static final ModelResourceLocation DEFAULT_MODEL_RES = new ModelResourceLocation(DEFAULT_MODEL, "inventory");
+	public static final ModelIdentifier DEFAULT_MODEL_RES = new ModelIdentifier(DEFAULT_MODEL, "inventory");
 	
 	private static final Map<String, String> DEFAULT_MACROS = Util.make(() -> {
 		Map<String, String> ret = new HashMap<>();
@@ -50,11 +50,11 @@ public class Book {
 	
 	public transient IModInfo owner;
 	public transient Class<?> ownerClass;
-	public transient ResourceLocation resourceLoc;
-	public transient ModelResourceLocation modelResourceLoc;
+	public transient Identifier resourceLoc;
+	public transient ModelIdentifier modelResourceLoc;
 	private transient ItemStack bookItem;
 	
-	public transient ResourceLocation bookResource, fillerResource, craftingResource;
+	public transient Identifier bookResource, fillerResource, craftingResource;
 	public transient int textColor, headerColor, nameplateColor, linkColor, linkHoverColor, progressBarColor, progressBarBackground;
 	
 	public transient boolean isExtension = false;
@@ -136,7 +136,7 @@ public class Book {
 	
 	public Map<String, String> macros = new HashMap<>();
 	
-	public void build(IModInfo owner,  Class<?> ownerClass, ResourceLocation resource, boolean external) {
+	public void build(IModInfo owner,  Class<?> ownerClass, Identifier resource, boolean external) {
 		this.owner = owner;
 		this.ownerClass = ownerClass;
 		this.resourceLoc = resource;
@@ -150,11 +150,11 @@ public class Book {
 		AdvancementSyncHandler.trackedNamespaces.addAll(advancementNamespaces);
 		
 		if(!isExtension) {
-			modelResourceLoc = new ModelResourceLocation(model, "inventory");
+			modelResourceLoc = new ModelIdentifier(model, "inventory");
 			
-			bookResource = new ResourceLocation(bookTexture);
-			fillerResource = new ResourceLocation(fillerTexture);
-			craftingResource = new ResourceLocation(craftingTexture);
+			bookResource = new Identifier(bookTexture);
+			fillerResource = new Identifier(fillerTexture);
+			craftingResource = new Identifier(craftingTexture);
 			
 			textColor = 0xFF000000 | Integer.parseInt(textColorRaw, 16);
 			headerColor = 0xFF000000 | Integer.parseInt(headerColorRaw, 16);
@@ -222,7 +222,7 @@ public class Book {
 	public void reloadExtensionContents() {
 		if(isExtension) {
 			if(extensionTarget == null) {
-				extensionTarget = BookRegistry.INSTANCE.books.get(new ResourceLocation(extend));
+				extensionTarget = BookRegistry.INSTANCE.books.get(new Identifier(extend));
 				
 				if(extensionTarget == null)
 					throw new IllegalArgumentException("Extension Book " + resourceLoc + " has no valid target");

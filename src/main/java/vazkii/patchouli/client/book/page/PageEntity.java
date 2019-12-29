@@ -30,7 +30,7 @@ public class PageEntity extends PageWithText {
 
 	boolean rotate = true;
 	@SerializedName("default_rotation")
-	float defaultRotation = -45f;
+	float defaultBlockRotation = -45f;
 
 	transient boolean errored;
 	transient Entity entity;
@@ -70,16 +70,16 @@ public class PageEntity extends PageWithText {
 			fontRenderer.drawStringWithShadow(I18n.format("patchouli.gui.lexicon.loading_error"), 58, 60, 0xFF0000);
 
 		if(entity != null)
-			renderEntity(parent.getMinecraft().world, rotate ? ClientTicker.total : defaultRotation);
+			renderEntity(parent.getMinecraft().world, rotate ? ClientTicker.total : defaultBlockRotation);
 
 		super.render(mouseX, mouseY, pticks);
 	}
 
-	private void renderEntity(World world, float rotation) {
-		renderEntity(entity, world, 58, 60, rotation, renderScale, offset);
+	private void renderEntity(World world, float BlockRotation) {
+		renderEntity(entity, world, 58, 60, BlockRotation, renderScale, offset);
 	}	
 
-	public static void renderEntity(Entity entity, World world, float x, float y, float rotation, float renderScale, float offset) {
+	public static void renderEntity(Entity entity, World world, float x, float y, float BlockRotation, float renderScale, float offset) {
 		entity.world = world;
 
 		GlStateManager.enableColorMaterial();
@@ -89,7 +89,7 @@ public class PageEntity extends PageWithText {
 		GlStateManager.scalef(-renderScale, renderScale, renderScale);
 		GlStateManager.translatef(0F, offset, 0F);
 		GlStateManager.rotatef(180.0F, 0.0F, 0.0F, 1.0F);
-		GlStateManager.rotatef(rotation, 0.0F, 1.0F, 0.0F);
+		GlStateManager.rotatef(BlockRotation, 0.0F, 1.0F, 0.0F);
 		RenderHelper.enableStandardItemLighting();
 		Minecraft.getInstance().getRenderManager().playerViewY = 180.0F;
 		Minecraft.getInstance().getRenderManager().renderEntity(entity, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F, false);

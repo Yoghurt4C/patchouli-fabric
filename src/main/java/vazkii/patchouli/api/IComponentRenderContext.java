@@ -7,7 +7,7 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 
 /**
  * A context for a custom component's methods.
@@ -28,9 +28,9 @@ public interface IComponentRenderContext {
 	
 	public void registerButton(Button button, int pageNum, Runnable onClick);
 
-	public ResourceLocation getBookTexture();
+	public Identifier getBookTexture();
 	
-	public ResourceLocation getCraftingTexture();
+	public Identifier getCraftingTexture();
 	
 	public int getTextColor();
 	

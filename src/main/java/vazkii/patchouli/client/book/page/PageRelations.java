@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 import vazkii.patchouli.client.book.BookEntry;
 import vazkii.patchouli.client.book.gui.GuiBook;
 import vazkii.patchouli.client.book.gui.GuiBookEntry;
@@ -27,7 +27,7 @@ public class PageRelations extends PageWithText {
 		super.build(entry, pageNum);
 
 		entryObjs = entries.stream()
-				.map((s) -> s.contains(":") ? new ResourceLocation(s) : new ResourceLocation(book.getModNamespace(), s))
+				.map((s) -> s.contains(":") ? new Identifier(s) : new Identifier(book.getModNamespace(), s))
 				.map((res) -> book.contents.entries.get(res))
 				.filter(Objects::nonNull)
 				.collect(Collectors.toList());

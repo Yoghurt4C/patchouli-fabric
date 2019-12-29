@@ -16,7 +16,7 @@ import java.util.function.Supplier;
 
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkEvent;
 import net.minecraftforge.fml.network.NetworkRegistry;
@@ -32,7 +32,7 @@ public class NetworkHandler {
 	private static final String PROTOCOL_VERSION = "1";
 	
 	public static final SimpleChannel CHANNEL = NetworkRegistry.ChannelBuilder
-			.named(new ResourceLocation(Patchouli.MOD_ID, "main"))
+			.named(new Identifier(Patchouli.MOD_ID, "main"))
 			.networkProtocolVersion(() -> PROTOCOL_VERSION)
 			.clientAcceptedVersions(PROTOCOL_VERSION::equals)
 			.serverAcceptedVersions(PROTOCOL_VERSION::equals)

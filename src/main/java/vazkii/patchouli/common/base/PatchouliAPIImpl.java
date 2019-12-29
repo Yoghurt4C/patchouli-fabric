@@ -14,7 +14,7 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -57,19 +57,19 @@ public class PatchouliAPIImpl implements IPatchouliAPI {
 	}
 	
 	@Override
-	public void openBookGUI(ServerPlayerEntity player, ResourceLocation book) {
+	public void openBookGUI(ServerPlayerEntity player, Identifier book) {
 		NetworkHandler.sendToPlayer(new MessageOpenBookGui(book.toString()), player); 
 	}
 	
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void openBookGUI(ResourceLocation book) {
+	public void openBookGUI(Identifier book) {
 		ClientBookRegistry.INSTANCE.displayBookGui(book.toString());
 	}
 	
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public ResourceLocation getOpenBookGui() {
+	public Identifier getOpenBookGui() {
 		Screen gui = Minecraft.getInstance().currentScreen;
 		if (gui instanceof GuiBook)
 			return ((GuiBook) gui).book.resourceLoc;
@@ -87,7 +87,7 @@ public class PatchouliAPIImpl implements IPatchouliAPI {
 	}
 	
 	@Override
-	public void registerTemplateAsBuiltin(ResourceLocation res, Supplier<InputStream> streamProvider) {
+	public void registerTemplateAsBuiltin(Identifier res, Supplier<InputStream> streamProvider) {
 		InputStream testStream = streamProvider.get();
 		if (testStream == null)
 			throw new NullPointerException("Stream provider can't return a null stream");
@@ -133,12 +133,12 @@ public class PatchouliAPIImpl implements IPatchouliAPI {
 	}
 	
 	@Override
-	public IMultiblock getMultiblock(ResourceLocation res) {
+	public IMultiblock getMultiblock(Identifier res) {
 		return MultiblockRegistry.MULTIBLOCKS.get(res);
 	}
 	
 	@Override
-	public IMultiblock registerMultiblock(ResourceLocation res, IMultiblock mb) {
+	public IMultiblock registerMultiblock(Identifier res, IMultiblock mb) {
 		return MultiblockRegistry.registerMultiblock(res, mb);
 	}
 	

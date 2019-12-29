@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName;
 import com.mojang.blaze3d.platform.GlStateManager;
 
 import net.minecraft.client.gui.AbstractGui;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 import vazkii.patchouli.api.VariableHolder;
 import vazkii.patchouli.client.book.BookEntry;
 import vazkii.patchouli.client.book.BookPage;
@@ -24,13 +24,13 @@ public class ComponentImage extends TemplateComponent {
 
 	public float scale = 1F;
 
-	transient ResourceLocation resource;
+	transient Identifier resource;
 
 	@Override
 	public void build(BookPage page, BookEntry entry, int pageNum) {
 		if(image.contains(":"))
-			resource = new ResourceLocation(image);
-		else resource = new ResourceLocation(page.book.getModNamespace(), image);
+			resource = new Identifier(image);
+		else resource = new Identifier(page.book.getModNamespace(), image);
 	}
 	
 	@Override

@@ -25,7 +25,7 @@ import com.google.common.base.Function;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.ModContainer;
@@ -40,7 +40,7 @@ public class BookRegistry {
 	public static final BookRegistry INSTANCE = new BookRegistry();
 	public static final String BOOKS_LOCATION = Patchouli.MOD_ID + "_books";
 
-	public final Map<ResourceLocation, Book> books = new HashMap<>();
+	public final Map<Identifier, Book> books = new HashMap<>();
 	public Gson gson;
 
 	private boolean loaded = false;
@@ -51,7 +51,7 @@ public class BookRegistry {
 
 	public void init() {
 		List<ModInfo> mods = ModList.get().getMods();
-		Map<Pair<ModInfo, ResourceLocation>, String> foundBooks = new HashMap<>();
+		Map<Pair<ModInfo, Identifier>, String> foundBooks = new HashMap<>();
 
 		mods.forEach(mod -> {
 			String id = mod.getModId();
@@ -69,7 +69,7 @@ public class BookRegistry {
 							}
 
 							String assetPath = fileStr.substring(fileStr.indexOf("/data"));
-							ResourceLocation bookId = new ResourceLocation(id, bookName);
+							Identifier bookId = new Identifier(id, bookName);
 							foundBooks.put(Pair.of(mod, bookId), assetPath);
 						}
 
@@ -81,7 +81,7 @@ public class BookRegistry {
 			ModInfo mod = pair.getLeft();
 			Optional<? extends ModContainer> container = ModList.get().getModContainerById(mod.getModId());
 			container.ifPresent(c -> {
-				ResourceLocation res = pair.getRight();
+				Identifier res = pair.getRight();
 
 				Class<?> ownerClass = c.getMod().getClass();
 				InputStream stream = ownerClass.getResourceAsStream(file);
@@ -92,7 +92,7 @@ public class BookRegistry {
 		BookFolderLoader.findBooks();
 	}
 
-	public void loadBook(IModInfo mod, Class<?> ownerClass, ResourceLocation res, InputStream stream,
+	public void loadBook(IModInfo mod, Class<?> ownerClass, Identifier res, InputStream stream,
 			boolean external) {
 		Reader reader = new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_8));
 		Book book = gson.fromJson(reader, Book.class);

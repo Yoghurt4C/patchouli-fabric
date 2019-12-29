@@ -7,7 +7,7 @@ import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 import vazkii.patchouli.client.book.BookContents;
 import vazkii.patchouli.client.book.EntryDisplayState;
 import vazkii.patchouli.client.book.gui.GuiBook;
@@ -29,7 +29,7 @@ public class GuiButtonInventoryBook extends Button {
 	@Override
 	public void renderButton(int mouseX, int mouseY, float pticks) {
 		Minecraft mc = Minecraft.getInstance();
-		Minecraft.getInstance().textureManager.bindTexture(new ResourceLocation(Patchouli.MOD_ID, "textures/gui/inventory_button.png"));
+		Minecraft.getInstance().textureManager.bindTexture(new Identifier(Patchouli.MOD_ID, "textures/gui/inventory_button.png"));
 		GlStateManager.color3f(1F, 1F, 1F);
 		
 		boolean hovered = mouseX >= x && mouseY >= y && mouseX < x + width && mouseY < y + height;

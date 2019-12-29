@@ -6,8 +6,8 @@ import net.minecraft.block.BlockState;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.fluid.IFluidState;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Rotation;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.BlockRotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.IBlockReader;
@@ -18,7 +18,7 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biomes;
 import net.minecraftforge.common.util.TriPredicate;
 import vazkii.patchouli.api.IMultiblock;
-import vazkii.patchouli.common.util.RotationUtil;
+import vazkii.patchouli.common.util.BlockRotationUtil;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
@@ -26,7 +26,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public abstract class AbstractMultiblock implements IMultiblock, IEnviromentBlockReader {
-    public ResourceLocation res;
+    public Identifier res;
     protected int offX, offY, offZ;
     protected int viewOffX, viewOffY, viewOffZ;
     private boolean symmetrical;
@@ -69,22 +69,22 @@ public abstract class AbstractMultiblock implements IMultiblock, IEnviromentBloc
     }
 
     @Override
-    public ResourceLocation getID() {
+    public Identifier getID() {
         return res;
     }
 
     @Override
-    public IMultiblock setResourceLocation(ResourceLocation res) {
+    public IMultiblock setIdentifier(Identifier res) {
         this.res = res;
         return this;
     }
 
     @Override
-    public void place(World world, BlockPos pos, Rotation rotation) {
+    public void place(World world, BlockPos pos, BlockRotation BlockRotation) {
         setWorld(world);
-        simulate(world, pos, rotation, false).getSecond().forEach(r -> {
+        simulate(world, pos, BlockRotation, false).getSecond().forEach(r -> {
             BlockPos placePos = r.getWorldPosition();
-            BlockState targetState = r.getStateMatcher().getDisplayedState((int) world.getDayTime()).rotate(rotation);
+            BlockState targetState = r.getStateMatcher().getDisplayedState((int) world.getDayTime()).rotate(BlockRotation);
             Block targetBlock = targetState.getBlock();
 
             if(!targetBlock.isAir(targetState, world, placePos) && targetState.isValidPosition(world, placePos) && world.getBlockState(placePos).getMaterial().isReplaceable())
@@ -93,10 +93,10 @@ public abstract class AbstractMultiblock implements IMultiblock, IEnviromentBloc
     }
 
     @Override
-    public Rotation validate(World world, BlockPos pos) {
-        if (isSymmetrical() && validate(world, pos, Rotation.NONE))
-            return Rotation.NONE;
-        else for (Rotation rot : Rotation.values()) {
+    public BlockRotation validate(World world, BlockPos pos) {
+        if (isSymmetrical() && validate(world, pos, BlockRotation.NONE))
+            return BlockRotation.NONE;
+        else for (BlockRotation rot : BlockRotation.values()) {
             if(validate(world, pos, rot)) {
                 return rot;
             }
@@ -105,14 +105,14 @@ public abstract class AbstractMultiblock implements IMultiblock, IEnviromentBloc
     }
 
     @Override
-    public boolean validate(World world, BlockPos pos, Rotation rotation) {
+    public boolean validate(World world, BlockPos pos, BlockRotation BlockRotation) {
         setWorld(world);
-        Pair<BlockPos, Collection<SimulateResult>> sim = simulate(world, pos, rotation, false);
+        Pair<BlockPos, Collection<SimulateResult>> sim = simulate(world, pos, BlockRotation, false);
 
         return sim.getSecond().stream().allMatch(r -> {
             BlockPos checkPos = r.getWorldPosition();
             TriPredicate<IBlockReader, BlockPos, BlockState> pred = r.getStateMatcher().getStatePredicate();
-            BlockState state = world.getBlockState(checkPos).rotate(RotationUtil.fixHorizontal(rotation));
+            BlockState state = world.getBlockState(checkPos).rotate(BlockRotationUtil.fixHorizontal(BlockRotation));
 
             return pred.test(world, checkPos, state);
         });

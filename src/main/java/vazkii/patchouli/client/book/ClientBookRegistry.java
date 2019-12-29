@@ -14,7 +14,7 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonPrimitive;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 import vazkii.patchouli.client.book.page.PageCrafting;
 import vazkii.patchouli.client.book.page.PageEmpty;
 import vazkii.patchouli.client.book.page.PageEntity;
@@ -85,7 +85,7 @@ public class ClientBookRegistry {
 	public void displayBookGui(String bookStr) {
 		currentLang = Minecraft.getInstance().getLanguageManager().getCurrentLanguage().getCode();
 		
-		ResourceLocation res = new ResourceLocation(bookStr);
+		Identifier res = new Identifier(bookStr);
 		Book book = BookRegistry.INSTANCE.books.get(res);
 		
 		if(book != null) {

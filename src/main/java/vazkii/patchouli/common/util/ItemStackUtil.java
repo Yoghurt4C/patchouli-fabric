@@ -12,7 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.JsonToNBT;
 import net.minecraft.tags.Tag;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class ItemStackUtil {
@@ -53,7 +53,7 @@ public class ItemStackUtil {
 			return ItemStack.EMPTY;
 		
 		int countn = Integer.parseInt(count);
-		ResourceLocation key = new ResourceLocation(tokens[0], tokens[1]);
+		Identifier key = new Identifier(tokens[0], tokens[1]);
 		if (!ForgeRegistries.ITEMS.containsKey(key)) {
 			throw new RuntimeException("Unknown item ID: " + key);
 		}
@@ -97,7 +97,7 @@ public class ItemStackUtil {
 		List<ItemStack> stacks = new ArrayList<>();
 		for (int i = 0; i < stacksSerialized.length; i++) {
 			if (stacksSerialized[i].startsWith("tag:")) {
-				Tag<Item> tag = Minecraft.getInstance().world.getTags().getItems().get(new ResourceLocation(stacksSerialized[i].substring(4)));
+				Tag<Item> tag = Minecraft.getInstance().world.getTags().getItems().get(new Identifier(stacksSerialized[i].substring(4)));
 				if(tag != null) {
 					for(Item item : tag.getAllElements())
 						stacks.add(new ItemStack(item));

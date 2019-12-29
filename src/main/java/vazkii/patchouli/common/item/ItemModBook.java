@@ -17,7 +17,7 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.text.ITextComponent;
@@ -44,9 +44,9 @@ public class ItemModBook extends Item {
 				.maxStackSize(1)
 				.group(ItemGroup.MISC));
 		
-		setRegistryName(new ResourceLocation(Patchouli.MOD_ID, "guide_book"));
+		setRegistryName(new Identifier(Patchouli.MOD_ID, "guide_book"));
 
-		addPropertyOverride(new ResourceLocation("completion"), new IItemPropertyGetter() {
+		addPropertyOverride(new Identifier("completion"), new IItemPropertyGetter() {
 			
 			@OnlyIn(Dist.CLIENT)
 			public float call(ItemStack stack, @Nullable World worldIn, @Nullable LivingEntity entityIn) {
@@ -102,7 +102,7 @@ public class ItemModBook extends Item {
 			return null;
 
 		String bookStr = stack.getTag().getString(TAG_BOOK);
-		ResourceLocation res = new ResourceLocation(bookStr);
+		Identifier res = new Identifier(bookStr);
 		return BookRegistry.INSTANCE.books.get(res);
 	}
 

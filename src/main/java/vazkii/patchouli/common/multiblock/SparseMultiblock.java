@@ -4,12 +4,12 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.block.BlockState;
-import net.minecraft.util.Rotation;
+import net.minecraft.util.BlockRotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import vazkii.patchouli.api.IStateMatcher;
-import vazkii.patchouli.common.util.RotationUtil;
+import vazkii.patchouli.common.util.BlockRotationUtil;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -48,23 +48,23 @@ public class SparseMultiblock extends AbstractMultiblock {
     }
 
     @Override
-    public Pair<BlockPos, Collection<SimulateResult>> simulate(World world, BlockPos anchor, Rotation rotation, boolean forView) {
+    public Pair<BlockPos, Collection<SimulateResult>> simulate(World world, BlockPos anchor, BlockRotation BlockRotation, boolean forView) {
         BlockPos center = forView
-                ? anchor.add(RotationUtil.x(rotation, -viewOffX, -viewOffZ), -viewOffY + 1, RotationUtil.z(rotation, -viewOffX, -viewOffZ))
-                : anchor.add(RotationUtil.x(rotation, -offX, -offZ), -offY, RotationUtil.z(rotation, -offX, -offZ));
+                ? anchor.add(BlockRotationUtil.x(BlockRotation, -viewOffX, -viewOffZ), -viewOffY + 1, BlockRotationUtil.z(BlockRotation, -viewOffX, -viewOffZ))
+                : anchor.add(BlockRotationUtil.x(BlockRotation, -offX, -offZ), -offY, BlockRotationUtil.z(BlockRotation, -offX, -offZ));
         List<SimulateResult> ret = new ArrayList<>();
         for (Map.Entry<BlockPos, IStateMatcher> e : data.entrySet()) {
-            BlockPos actionPos = center.add(RotationUtil.x(rotation, e.getKey().getX(), e.getKey().getZ()), e.getKey().getY(), RotationUtil.z(rotation, e.getKey().getX(), e.getKey().getZ()));
+            BlockPos actionPos = center.add(BlockRotationUtil.x(BlockRotation, e.getKey().getX(), e.getKey().getZ()), e.getKey().getY(), BlockRotationUtil.z(BlockRotation, e.getKey().getX(), e.getKey().getZ()));
             ret.add(new SimulateResultImpl(actionPos, e.getValue(), null));
         }
         return Pair.of(center, ret);
     }
 
     @Override
-    public boolean test(World world, BlockPos start, int x, int y, int z, Rotation rotation) {
+    public boolean test(World world, BlockPos start, int x, int y, int z, BlockRotation BlockRotation) {
         setWorld(world);
-        BlockPos checkPos = start.add(RotationUtil.x(rotation, x, z), y, RotationUtil.z(rotation, x, z));
-        BlockState state = world.getBlockState(checkPos).rotate(RotationUtil.fixHorizontal(rotation));
+        BlockPos checkPos = start.add(BlockRotationUtil.x(BlockRotation, x, z), y, BlockRotationUtil.z(BlockRotation, x, z));
+        BlockState state = world.getBlockState(checkPos).rotate(BlockRotationUtil.fixHorizontal(BlockRotation));
         IStateMatcher matcher = data.getOrDefault(new BlockPos(x, y, z), StateMatcher.ANY);
         return matcher.getStatePredicate().test(world, checkPos, state);
     }

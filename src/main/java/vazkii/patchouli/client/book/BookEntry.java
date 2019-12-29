@@ -13,7 +13,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.gson.annotations.SerializedName;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.StringUtils;
 import vazkii.patchouli.client.base.ClientAdvancements;
 import vazkii.patchouli.client.base.PersistentData;
@@ -46,7 +46,7 @@ public class BookEntry extends AbstractReadStateHolder implements Comparable<Boo
 	@SerializedName("extra_recipe_mappings")
 	private Map<String, Integer> extraRecipeMappings;
 
-	private transient ResourceLocation resource;
+	private transient Identifier resource;
 	transient Book book;
 	private transient Book trueProvider;
 	private transient BookCategory lcategory = null;
@@ -95,8 +95,8 @@ public class BookEntry extends AbstractReadStateHolder implements Comparable<Boo
 	public BookCategory getCategory() {
 		if(lcategory == null) {
 			if(category.contains(":"))
-				lcategory = book.contents.categories.get(new ResourceLocation(category));
-			else lcategory = book.contents.categories.get(new ResourceLocation(book.getModNamespace(), category));
+				lcategory = book.contents.categories.get(new Identifier(category));
+			else lcategory = book.contents.categories.get(new Identifier(book.getModNamespace(), category));
 		}
 
 		return lcategory;
@@ -137,7 +137,7 @@ public class BookEntry extends AbstractReadStateHolder implements Comparable<Boo
 		return entryColor;
 	}
 
-	public ResourceLocation getResource() {
+	public Identifier getResource() {
 		return resource;
 	}
 
@@ -182,7 +182,7 @@ public class BookEntry extends AbstractReadStateHolder implements Comparable<Boo
 		} else this.book = book;
 	}
 
-	public void build(ResourceLocation resource) {
+	public void build(Identifier resource) {
 		if(built)
 			return;
 

@@ -26,7 +26,7 @@ public class ComponentEntity extends TemplateComponent {
 	
 	boolean rotate = true;
 	@SerializedName("default_rotation")
-	float defaultRotation = -45f;
+	float defaultBlockRotation = -45f;
 	
 	transient boolean errored;
 	transient Entity entity;
@@ -49,11 +49,11 @@ public class ComponentEntity extends TemplateComponent {
 			page.fontRenderer.drawStringWithShadow(I18n.format("patchouli.gui.lexicon.loading_error"), x, y, 0xFF0000);
 		
 		if(entity != null)
-			renderEntity(page.mc.world, rotate ?  ClientTicker.total : defaultRotation);
+			renderEntity(page.mc.world, rotate ?  ClientTicker.total : defaultBlockRotation);
 	}
 
-	private void renderEntity(World world, float rotation) {
-		PageEntity.renderEntity(entity, world, x, y, rotation, renderScale, offset);
+	private void renderEntity(World world, float BlockRotation) {
+		PageEntity.renderEntity(entity, world, x, y, BlockRotation, renderScale, offset);
 	}
 	
 	private void loadEntity(World world) {

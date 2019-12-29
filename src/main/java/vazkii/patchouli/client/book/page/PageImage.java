@@ -4,7 +4,7 @@ import com.mojang.blaze3d.platform.GlStateManager;
 
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 import vazkii.patchouli.client.book.gui.GuiBook;
 import vazkii.patchouli.client.book.gui.GuiBookEntry;
 import vazkii.patchouli.client.book.gui.button.GuiButtonBookArrowSmall;
@@ -16,16 +16,16 @@ public class PageImage extends PageWithText {
 	String title;
 	boolean border;
 
-	transient ResourceLocation[] imageRes;
+	transient Identifier[] imageRes;
 	transient int index;
 	
 	@Override
 	public void onDisplayed(GuiBookEntry parent, int left, int top) {
 		super.onDisplayed(parent, left, top);
 		
-		imageRes = new ResourceLocation[images.length];
+		imageRes = new Identifier[images.length];
 		for(int i = 0; i < images.length; i++)
-			imageRes[i] = new ResourceLocation(images[i]);
+			imageRes[i] = new Identifier(images[i]);
 		
 		int x = 90;
 		int y = 100;

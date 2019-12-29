@@ -30,7 +30,7 @@ import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.MinecraftForgeClient;
@@ -69,7 +69,7 @@ public class PageMultiblock extends PageWithText {
 	@Override
 	public void build(BookEntry entry, int pageNum) {
 		if(multiblockId != null && !multiblockId.isEmpty()) {
-			IMultiblock mb = MultiblockRegistry.MULTIBLOCKS.get(new ResourceLocation(multiblockId));
+			IMultiblock mb = MultiblockRegistry.MULTIBLOCKS.get(new Identifier(multiblockId));
 			
 			if(mb instanceof AbstractMultiblock)
 				multiblockObj = (AbstractMultiblock) mb;

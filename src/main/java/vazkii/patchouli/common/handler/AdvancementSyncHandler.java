@@ -13,7 +13,7 @@ import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.advancements.PlayerAdvancements;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 import net.minecraftforge.event.entity.player.AdvancementEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -27,7 +27,7 @@ public final class AdvancementSyncHandler {
 
 	public static final Set<String> trackedNamespaces = new HashSet<>();
 
-	private static Set<ResourceLocation> syncedAdvancements = Collections.emptySet();
+	private static Set<Identifier> syncedAdvancements = Collections.emptySet();
 
 	@SubscribeEvent
 	public static void serverStartedEvent(FMLServerStartedEvent evt) {
@@ -64,7 +64,7 @@ public final class AdvancementSyncHandler {
 		AdvancementManager manager = player.getServer().getAdvancementManager();
 		
 		List<String> completed = new LinkedList<>();
-		for(ResourceLocation res : syncedAdvancements) {
+		for(Identifier res : syncedAdvancements) {
 			Advancement adv = manager.getAdvancement(res);
 			if(adv == null)
 				continue;

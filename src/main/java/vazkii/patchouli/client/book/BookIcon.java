@@ -6,20 +6,20 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 import vazkii.patchouli.common.util.ItemStackUtil;
 
 public class BookIcon {
 
 	private final IconType type;
 	private final ItemStack stack;
-	private final ResourceLocation res;
+	private final Identifier res;
 	
 	public BookIcon(String str) {
 		if(str.endsWith(".png")) {
 			type = IconType.RESOURCE;
 			stack = null;
-			res = new ResourceLocation(str);
+			res = new Identifier(str);
 		} else {
 			type = IconType.STACK;
 			stack = ItemStackUtil.loadStackFromString(str);
@@ -33,7 +33,7 @@ public class BookIcon {
 		res = null;
 	}
 	
-	public BookIcon(ResourceLocation res) {
+	public BookIcon(Identifier res) {
 		type = IconType.RESOURCE;
 		stack = null;
 		this.res = res;

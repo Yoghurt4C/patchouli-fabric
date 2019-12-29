@@ -17,7 +17,7 @@ import com.google.common.base.Function;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.text.ITextComponent;
@@ -44,7 +44,7 @@ public class MessageSerializer {
 		mapHandler(CompoundNBT.class, PacketBuffer::readCompoundTag, PacketBuffer::writeCompoundTag);
 		mapHandler(ItemStack.class, PacketBuffer::readItemStack, MessageSerializer::writeItemStack);
 		mapHandler(String.class, MessageSerializer::readString, MessageSerializer::writeString);
-		mapHandler(ResourceLocation.class, PacketBuffer::readResourceLocation, PacketBuffer::writeResourceLocation);
+		mapHandler(Identifier.class, PacketBuffer::readIdentifier, PacketBuffer::writeIdentifier);
 		mapHandler(Date.class, PacketBuffer::readTime, PacketBuffer::writeTime);
 		mapHandler(BlockRayTraceResult.class, PacketBuffer::readBlockRay, PacketBuffer::writeBlockRay);
 	}

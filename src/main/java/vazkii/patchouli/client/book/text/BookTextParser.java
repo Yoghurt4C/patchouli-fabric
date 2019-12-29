@@ -10,7 +10,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.settings.KeyBinding;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.text.TextFormatting;
 import vazkii.patchouli.client.book.BookEntry;
 import vazkii.patchouli.client.book.gui.GuiBook;
@@ -96,7 +96,7 @@ public class BookTextParser {
 					parameter = parameter.substring(0, hash);
 				}
 
-				ResourceLocation href = new ResourceLocation(state.book.getModNamespace(), parameter);
+				Identifier href = new Identifier(state.book.getModNamespace(), parameter);
 				BookEntry entry = state.book.contents.entries.get(href);
 				if(entry != null) {
 					state.tooltip = entry.isLocked() ? (TextFormatting.GRAY + I18n.format("patchouli.gui.lexicon.locked")) : entry.getName();

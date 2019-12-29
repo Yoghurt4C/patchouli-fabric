@@ -7,7 +7,7 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.fonts.Font;
 import net.minecraft.client.gui.fonts.providers.IGlyphProvider;
 import net.minecraft.client.gui.fonts.providers.UnicodeTextureGlyphProvider;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 import vazkii.patchouli.common.base.Patchouli;
 
 public final class UnicodeFontHandler {
@@ -16,9 +16,9 @@ public final class UnicodeFontHandler {
 	
 	private static void makeUnicodeFont() {
 		Minecraft mc = Minecraft.getInstance();
-		unicodeFont = new FontRenderer(mc.textureManager, new Font(mc.textureManager, new ResourceLocation(Patchouli.MOD_ID, "unicode")));
+		unicodeFont = new FontRenderer(mc.textureManager, new Font(mc.textureManager, new Identifier(Patchouli.MOD_ID, "unicode")));
 			
-		IGlyphProvider provider = new UnicodeTextureGlyphProvider.Factory(new ResourceLocation("font/glyph_sizes.bin"), "minecraft:font/unicode_page_%s.png").create(mc.getResourceManager());
+		IGlyphProvider provider = new UnicodeTextureGlyphProvider.Factory(new Identifier("font/glyph_sizes.bin"), "minecraft:font/unicode_page_%s.png").create(mc.getResourceManager());
 		unicodeFont.setGlyphProviders(Lists.newArrayList(provider));
 	}
 	

@@ -10,7 +10,7 @@ import net.minecraft.client.gui.widget.Widget;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.gui.widget.button.ImageButton;
 import net.minecraft.item.crafting.RecipeBook;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.GuiScreenEvent.ActionPerformedEvent;
 import net.minecraftforge.client.event.GuiScreenEvent.InitGuiEvent;
@@ -29,7 +29,7 @@ public class InventoryBookButtonHandler {
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public static void onGuiInitPost(InitGuiEvent.Post event) {
 		String bookID = PatchouliConfig.inventoryButtonBook.get();
-		Book book = BookRegistry.INSTANCE.books.get(new ResourceLocation(bookID));
+		Book book = BookRegistry.INSTANCE.books.get(new Identifier(bookID));
 		Screen gui = event.getGui();
 		if(book == null || !(gui instanceof InventoryScreen))
 			return;

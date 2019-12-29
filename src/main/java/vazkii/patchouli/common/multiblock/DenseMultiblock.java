@@ -4,14 +4,14 @@ import com.mojang.datafixers.util.Pair;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.util.Rotation;
+import net.minecraft.util.BlockRotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.TriPredicate;
 import vazkii.patchouli.api.IStateMatcher;
-import vazkii.patchouli.common.util.RotationUtil;
+import vazkii.patchouli.common.util.BlockRotationUtil;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -31,15 +31,15 @@ public class DenseMultiblock extends AbstractMultiblock {
 	}
 
 	@Override
-	public Pair<BlockPos, Collection<SimulateResult>> simulate(World world, BlockPos anchor, Rotation rotation, boolean forView) {
+	public Pair<BlockPos, Collection<SimulateResult>> simulate(World world, BlockPos anchor, BlockRotation BlockRotation, boolean forView) {
 		BlockPos center = forView
-				? anchor.add(RotationUtil.x(rotation, -viewOffX, -viewOffZ), -viewOffY + 1, RotationUtil.z(rotation, -viewOffX, -viewOffZ))
-				: anchor.add(RotationUtil.x(rotation, -offX, -offZ), -offY, RotationUtil.z(rotation, -offX, -offZ));
+				? anchor.add(BlockRotationUtil.x(BlockRotation, -viewOffX, -viewOffZ), -viewOffY + 1, BlockRotationUtil.z(BlockRotation, -viewOffX, -viewOffZ))
+				: anchor.add(BlockRotationUtil.x(BlockRotation, -offX, -offZ), -offY, BlockRotationUtil.z(BlockRotation, -offX, -offZ));
 		List<SimulateResult> ret = new ArrayList<>();
 		for(int x = 0; x < size.getX(); x++)
 			for(int y = 0; y < size.getY(); y++)
 				for(int z = 0; z < size.getZ(); z++) {
-					BlockPos actionPos = center.add(RotationUtil.x(rotation, x, z), y, RotationUtil.z(rotation, x, z));
+					BlockPos actionPos = center.add(BlockRotationUtil.x(BlockRotation, x, z), y, BlockRotationUtil.z(BlockRotation, x, z));
 					char currC = pattern[y][x].charAt(z);
 					ret.add(new SimulateResultImpl(actionPos, stateTargets[x][y][z], currC));
 				}
@@ -47,14 +47,14 @@ public class DenseMultiblock extends AbstractMultiblock {
 	}
 
 	@Override
-	public boolean test(World world, BlockPos start, int x, int y, int z, Rotation rotation) {
+	public boolean test(World world, BlockPos start, int x, int y, int z, BlockRotation BlockRotation) {
 		setWorld(world);
 		if (x < 0 || y < 0 || z < 0 || x >= size.getX() || y >= size.getY() || z >= size.getZ()) {
 			return false;
 		}
-		BlockPos checkPos = start.add(RotationUtil.x(rotation, x, z), y, RotationUtil.z(rotation, x, z));
+		BlockPos checkPos = start.add(BlockRotationUtil.x(BlockRotation, x, z), y, BlockRotationUtil.z(BlockRotation, x, z));
 		TriPredicate<IBlockReader, BlockPos, BlockState> pred = stateTargets[x][y][z].getStatePredicate();
-		BlockState state = world.getBlockState(checkPos).rotate(RotationUtil.fixHorizontal(rotation));
+		BlockState state = world.getBlockState(checkPos).rotate(BlockRotationUtil.fixHorizontal(BlockRotation));
 
 		return pred.test(world, checkPos, state);
 	}

@@ -14,7 +14,7 @@ import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 import vazkii.patchouli.api.IComponentRenderContext;
 import vazkii.patchouli.client.base.PersistentData;
 import vazkii.patchouli.client.base.PersistentData.DataHolder.BookData;
@@ -255,12 +255,12 @@ public class GuiBookEntry extends GuiBook implements IComponentRenderContext {
 	}
 
 	@Override
-	public ResourceLocation getBookTexture() {
+	public Identifier getBookTexture() {
 		return book.bookResource;
 	}
 
 	@Override
-	public ResourceLocation getCraftingTexture() {
+	public Identifier getCraftingTexture() {
 		return book.craftingResource;
 	}
 

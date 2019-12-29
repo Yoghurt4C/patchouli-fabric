@@ -3,7 +3,7 @@ package vazkii.patchouli.client.book.page;
 import com.mojang.blaze3d.platform.GlStateManager;
 
 import net.minecraft.client.resources.I18n;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 import vazkii.patchouli.client.book.gui.GuiBook;
 import vazkii.patchouli.client.book.page.abstr.PageWithText;
 
@@ -31,7 +31,7 @@ public class PageText extends PageWithText {
 			String smolText = "";
 			
 			if(mc.gameSettings.advancedItemTooltips) {
-				ResourceLocation res = parent.getEntry().getResource();
+				Identifier res = parent.getEntry().getResource();
 				smolText = res.toString();
 			} else if(entry.isExtension()) {
 				String name = entry.getTrueProvider().getOwnerName();

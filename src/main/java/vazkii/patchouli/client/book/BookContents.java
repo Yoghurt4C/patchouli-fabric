@@ -22,7 +22,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 import net.minecraftforge.fml.loading.moddiscovery.ModInfo;
 import net.minecraftforge.forgespi.language.IModInfo;
 import vazkii.patchouli.client.book.gui.GuiBook;
@@ -39,13 +39,13 @@ public class BookContents extends AbstractReadStateHolder {
 	private static final String[] ORDINAL_SUFFIXES = new String[]{ "th", "st", "nd", "rd", "th", "th", "th", "th", "th", "th" };
 	protected static final String DEFAULT_LANG = "en_us";
 	
-	public static final HashMap<ResourceLocation, Supplier<BookTemplate>> addonTemplates = new HashMap<>();
+	public static final HashMap<Identifier, Supplier<BookTemplate>> addonTemplates = new HashMap<>();
 
 	public final Book book;
 
-	public Map<ResourceLocation, BookCategory> categories = new HashMap<>();
-	public Map<ResourceLocation, BookEntry> entries = new HashMap<>();
-	public Map<ResourceLocation, Supplier<BookTemplate>> templates = new HashMap<>();
+	public Map<Identifier, BookCategory> categories = new HashMap<>();
+	public Map<Identifier, BookEntry> entries = new HashMap<>();
+	public Map<Identifier, Supplier<BookTemplate>> templates = new HashMap<>();
 	public Map<StackWrapper, Pair<BookEntry, Integer>> recipeMappings = new HashMap<>();
 	private boolean errored = false;
 	private Exception exception = null;
@@ -123,9 +123,9 @@ public class BookContents extends AbstractReadStateHolder {
 			else indexIcon = new BookIcon(book.indexIconRaw);
 		}
 
-		List<ResourceLocation> foundCategories = new ArrayList<>();
-		List<ResourceLocation> foundEntries = new ArrayList<>();
-		List<ResourceLocation> foundTemplates = new ArrayList<>();
+		List<Identifier> foundCategories = new ArrayList<>();
+		List<Identifier> foundEntries = new ArrayList<>();
+		List<Identifier> foundTemplates = new ArrayList<>();
 
 		try { 
 			String bookName = book.resourceLoc.getPath();
@@ -134,11 +134,11 @@ public class BookContents extends AbstractReadStateHolder {
 			findFiles("entries", foundEntries);
 			findFiles("templates", foundTemplates);
 			
-			foundCategories.forEach(c -> loadCategory(c, new ResourceLocation(c.getNamespace(),
+			foundCategories.forEach(c -> loadCategory(c, new Identifier(c.getNamespace(),
 					String.format("%s/%s/%s/categories/%s.json", BookRegistry.BOOKS_LOCATION, bookName, DEFAULT_LANG, c.getPath())), book));
-			foundEntries.forEach(e -> loadEntry(e, new ResourceLocation(e.getNamespace(),
+			foundEntries.forEach(e -> loadEntry(e, new Identifier(e.getNamespace(),
 					String.format("%s/%s/%s/entries/%s.json", BookRegistry.BOOKS_LOCATION, bookName, DEFAULT_LANG, e.getPath())), book));
-			foundTemplates.forEach(e -> loadTemplate(e, new ResourceLocation(e.getNamespace(),
+			foundTemplates.forEach(e -> loadTemplate(e, new Identifier(e.getNamespace(),
 					String.format("%s/%s/%s/templates/%s.json", BookRegistry.BOOKS_LOCATION, bookName, DEFAULT_LANG, e.getPath())), book));
 
 			entries.forEach((res, entry) -> {
@@ -163,7 +163,7 @@ public class BookContents extends AbstractReadStateHolder {
 		}
 	}
 
-	protected void findFiles(String dir, List<ResourceLocation> list) {
+	protected void findFiles(String dir, List<Identifier> list) {
 		IModInfo mod = book.owner;
 		if(mod instanceof ModInfo) {
 			String id = mod.getModId();
@@ -171,13 +171,13 @@ public class BookContents extends AbstractReadStateHolder {
 		}
 	}
 	
-	private BiFunction<Path, Path, Boolean> pred(String modId, List<ResourceLocation> list) {
+	private BiFunction<Path, Path, Boolean> pred(String modId, List<Identifier> list) {
 		return (root, file) -> {
 			Path rel = root.relativize(file);
 			String relName = rel.toString();
 			if(relName.endsWith(".json")) {
 				relName = FilenameUtils.removeExtension(FilenameUtils.separatorsToUnix(relName));
-				ResourceLocation res = new ResourceLocation(modId, relName);
+				Identifier res = new Identifier(modId, relName);
 				list.add(res);
 			}
 
@@ -185,7 +185,7 @@ public class BookContents extends AbstractReadStateHolder {
 		};
 	}
 
-	private void loadCategory(ResourceLocation key, ResourceLocation res, Book book) {
+	private void loadCategory(Identifier key, Identifier res, Book book) {
 		try (Reader stream = loadLocalizedJson(res)) {
 			BookCategory category = ClientBookRegistry.INSTANCE.gson.fromJson(stream, BookCategory.class);
 			if (category == null)
@@ -199,7 +199,7 @@ public class BookContents extends AbstractReadStateHolder {
 		}
 	}
 
-	private void loadEntry(ResourceLocation key, ResourceLocation res, Book book) {
+	private void loadEntry(Identifier key, Identifier res, Book book) {
 		try (Reader stream = loadLocalizedJson(res)) {
 			BookEntry entry = ClientBookRegistry.INSTANCE.gson.fromJson(stream, BookEntry.class);
 			if (entry == null)
@@ -220,7 +220,7 @@ public class BookContents extends AbstractReadStateHolder {
 		}
 	}
 	
-	private void loadTemplate(ResourceLocation key, ResourceLocation res, Book book) {
+	private void loadTemplate(Identifier key, Identifier res, Book book) {
 		Supplier<BookTemplate> supplier = () -> {
 			try (Reader stream = loadLocalizedJson(res)) {
 				return ClientBookRegistry.INSTANCE.gson.fromJson(stream, BookTemplate.class);
@@ -237,8 +237,8 @@ public class BookContents extends AbstractReadStateHolder {
 		templates.put(key, supplier);
 	}
 
-	private Reader loadLocalizedJson(ResourceLocation res) {
-		ResourceLocation localized = new ResourceLocation(res.getNamespace(),
+	private Reader loadLocalizedJson(Identifier res) {
+		Identifier localized = new Identifier(res.getNamespace(),
 				res.getPath().replaceAll(DEFAULT_LANG, ClientBookRegistry.INSTANCE.currentLang));
 
 		InputStream input = loadJson(localized, res);
@@ -248,7 +248,7 @@ public class BookContents extends AbstractReadStateHolder {
 		return new InputStreamReader(new BufferedInputStream(input), StandardCharsets.UTF_8);
 	}
 
-	protected InputStream loadJson(ResourceLocation resloc, ResourceLocation fallback) {
+	protected InputStream loadJson(Identifier resloc, Identifier fallback) {
 		String path = "/data/" + resloc.getNamespace() + "/" + resloc.getPath();
 		Patchouli.LOGGER.debug("Loading {}", path);
 		

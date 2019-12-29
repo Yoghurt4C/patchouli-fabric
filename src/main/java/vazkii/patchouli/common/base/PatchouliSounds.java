@@ -1,6 +1,6 @@
 package vazkii.patchouli.common.base;
 
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.registry.Registry;
 import net.minecraftforge.common.MinecraftForge;
@@ -21,7 +21,7 @@ public class PatchouliSounds {
 	}
 	
 	public static SoundEvent register(String name) {
-		ResourceLocation loc = new ResourceLocation(Patchouli.MOD_ID, name);
+		Identifier loc = new Identifier(Patchouli.MOD_ID, name);
 		SoundEvent e = new SoundEvent(loc).setRegistryName(loc);
 		
 		return e;
@@ -34,7 +34,7 @@ public class PatchouliSounds {
 	}
 	
 	public static SoundEvent getSound(String sound, SoundEvent fallback) {
-		ResourceLocation key = new ResourceLocation(sound);
+		Identifier key = new Identifier(sound);
 		return ForgeRegistries.SOUND_EVENTS.containsKey(key)
 				? ForgeRegistries.SOUND_EVENTS.getValue(key)
 				: fallback;

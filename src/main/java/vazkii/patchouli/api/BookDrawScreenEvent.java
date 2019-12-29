@@ -1,7 +1,7 @@
 package vazkii.patchouli.api;
 
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.Event;
 
@@ -20,7 +20,7 @@ public class BookDrawScreenEvent
 	public final int mouseY;
 	public final float partialTicks;
 	
-	public BookDrawScreenEvent(Screen gui, ResourceLocation book, int mouseX, int mouseY, float partialTicks) {
+	public BookDrawScreenEvent(Screen gui, Identifier book, int mouseX, int mouseY, float partialTicks) {
 		super(book);
 		this.gui = gui;
 		this.mouseX = mouseX;

@@ -1,7 +1,7 @@
 package vazkii.patchouli.common.item;
 
 import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.client.renderer.model.ModelResourceLocation;
+import net.minecraft.client.renderer.model.ModelIdentifier;
 import net.minecraft.item.Item;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -26,14 +26,14 @@ public class PatchouliItems {
 	@OnlyIn(Dist.CLIENT)
 	public static void registerModels(ModelRegistryEvent event) {
 		BookRegistry.INSTANCE.books.values().forEach(b -> {
-			ModelLoader.addSpecialModel(new ModelResourceLocation(b.model, "inventory"));
+			ModelLoader.addSpecialModel(new ModelIdentifier(b.model, "inventory"));
 		});
 	}
 
 	@SubscribeEvent
 	@OnlyIn(Dist.CLIENT)
 	public static void replaceModel(ModelBakeEvent event) {
-		ModelResourceLocation key = new ModelResourceLocation(book.getRegistryName(), "inventory");
+		ModelIdentifier key = new ModelIdentifier(book.getRegistryName(), "inventory");
 		IBakedModel oldModel = event.getModelRegistry().get(key);
 		event.getModelRegistry().put(key, new BookModel(oldModel));
 	}

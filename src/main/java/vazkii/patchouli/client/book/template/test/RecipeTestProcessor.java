@@ -5,7 +5,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.crafting.RecipeManager;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 import vazkii.patchouli.api.IComponentProcessor;
 import vazkii.patchouli.api.IVariableProvider;
 import vazkii.patchouli.common.util.ItemStackUtil;
@@ -18,7 +18,7 @@ public class RecipeTestProcessor implements IComponentProcessor {
 	public void setup(IVariableProvider<String> variables) {
 		String recipeId = variables.get("recipe");
 		RecipeManager manager = Minecraft.getInstance().world.getRecipeManager();
-		recipe = manager.getRecipe(new ResourceLocation(recipeId)).orElseThrow(IllegalArgumentException::new);
+		recipe = manager.getRecipe(new Identifier(recipeId)).orElseThrow(IllegalArgumentException::new);
 	}
 
 	@Override

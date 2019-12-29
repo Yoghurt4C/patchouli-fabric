@@ -4,7 +4,7 @@ import net.minecraft.advancements.Advancement;
 import net.minecraft.client.gui.advancements.AdvancementsScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.multiplayer.ClientAdvancementManager;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 import vazkii.patchouli.client.base.ClientAdvancements;
 
 public class GuiAdvancementsExt extends AdvancementsScreen {
@@ -15,7 +15,7 @@ public class GuiAdvancementsExt extends AdvancementsScreen {
 		super(manager);
 		this.parent = parent;
 		
-		Advancement start = manager.getAdvancementList().getAdvancement(new ResourceLocation(tab));
+		Advancement start = manager.getAdvancementList().getAdvancement(new Identifier(tab));
 		if(start != null && ClientAdvancements.hasDone(start.getId().toString()))
 			manager.setSelectedTab(start, false);
 	}

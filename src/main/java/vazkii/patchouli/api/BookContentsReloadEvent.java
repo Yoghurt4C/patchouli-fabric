@@ -1,6 +1,6 @@
 package vazkii.patchouli.api;
 
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.Event;
 
@@ -11,9 +11,9 @@ import net.minecraftforge.eventbus.api.Event;
 public class BookContentsReloadEvent
     extends Event {
 
-  public final ResourceLocation book;
+  public final Identifier book;
 
-  public BookContentsReloadEvent(ResourceLocation book) {
+  public BookContentsReloadEvent(Identifier book) {
 
     this.book = book;
   }

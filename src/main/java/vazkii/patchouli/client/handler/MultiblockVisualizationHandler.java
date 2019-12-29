@@ -28,7 +28,7 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
-import net.minecraft.util.Rotation;
+import net.minecraft.util.BlockRotation;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
@@ -47,7 +47,7 @@ import vazkii.patchouli.api.IStateMatcher;
 import vazkii.patchouli.client.base.ClientTicker;
 import vazkii.patchouli.client.base.PersistentData.DataHolder.BookData.Bookmark;
 import vazkii.patchouli.common.multiblock.StateMatcher;
-import vazkii.patchouli.common.util.RotationUtil;
+import vazkii.patchouli.common.util.BlockRotationUtil;
 
 @EventBusSubscriber(Dist.CLIENT)
 public class MultiblockVisualizationHandler {
@@ -59,7 +59,7 @@ public class MultiblockVisualizationHandler {
 	private static String name;
 	private static BlockPos pos;
 	private static boolean isAnchored;
-	private static Rotation facingRotation;
+	private static BlockRotation facingBlockRotation;
 	private static Function<BlockPos, BlockPos> offsetApplier;
 	private static int blocks, blocksDone, airFilled;
 	private static int timeComplete;
@@ -176,15 +176,15 @@ public class MultiblockVisualizationHandler {
 			renderMultiblock(Minecraft.getInstance().world);
 	}
 
-	public static void anchorTo(BlockPos target, Rotation rot) {
+	public static void anchorTo(BlockPos target, BlockRotation rot) {
 		pos = target;
-		facingRotation = rot;
+		facingBlockRotation = rot;
 		isAnchored = true;
 	}
 	@SubscribeEvent
 	public static void onPlayerInteract(PlayerInteractEvent.RightClickBlock event) {
 		if(hasMultiblock && !isAnchored && event.getPlayer() == Minecraft.getInstance().player) {
-			anchorTo(event.getPos(), getRotation(event.getPlayer()));
+			anchorTo(event.getPos(), getBlockRotation(event.getPlayer()));
 		}
 	}
 
@@ -202,7 +202,7 @@ public class MultiblockVisualizationHandler {
 	public static void renderMultiblock(World world) {
 		Minecraft mc = Minecraft.getInstance();
 		if(!isAnchored) {
-			facingRotation = getRotation(mc.player);
+			facingBlockRotation = getBlockRotation(mc.player);
 			if(mc.objectMouseOver instanceof BlockRayTraceResult)
 				pos = ((BlockRayTraceResult) mc.objectMouseOver).getPos();
 		}
@@ -212,7 +212,7 @@ public class MultiblockVisualizationHandler {
 		if(pos == null)
 			return;
 		if(multiblock.isSymmetrical())
-			facingRotation = Rotation.NONE;
+			facingBlockRotation = BlockRotation.NONE;
 
 		EntityRendererManager manager = Minecraft.getInstance().getRenderManager();
 		BlockRendererDispatcher dispatcher = Minecraft.getInstance().getBlockRendererDispatcher();
@@ -239,7 +239,7 @@ public class MultiblockVisualizationHandler {
 		lookingState = null;
 		lookingPos = checkPos;
 
-		Pair<BlockPos, Collection<IMultiblock.SimulateResult>> sim = multiblock.simulate(world, getStartPos(), getFacingRotation(), true);
+		Pair<BlockPos, Collection<IMultiblock.SimulateResult>> sim = multiblock.simulate(world, getStartPos(), getFacingBlockRotation(), true);
 		for (IMultiblock.SimulateResult r : sim.getSecond()) {
 			float alpha = 0.3F;
 			if(r.getWorldPosition().equals(checkPos)) {
@@ -252,8 +252,8 @@ public class MultiblockVisualizationHandler {
 				if(!air)
 					blocks++;
 
-				if(!r.test(world, facingRotation)) {
-					BlockState renderState = r.getStateMatcher().getDisplayedState(ClientTicker.ticksInGame).rotate(facingRotation);
+				if(!r.test(world, facingBlockRotation)) {
+					BlockState renderState = r.getStateMatcher().getDisplayedState(ClientTicker.ticksInGame).rotate(facingBlockRotation);
 					mc.textureManager.bindTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
 					renderBlock(world, renderState, r.getWorldPosition(), alpha, dispatcher);
 
@@ -311,8 +311,8 @@ public class MultiblockVisualizationHandler {
 		return isAnchored;
 	}
 
-	public static Rotation getFacingRotation() {
-		return multiblock.isSymmetrical() ? Rotation.NONE : facingRotation;
+	public static BlockRotation getFacingBlockRotation() {
+		return multiblock.isSymmetrical() ? BlockRotation.NONE : facingBlockRotation;
 	}
 
 	public static BlockPos getStartPos() {
@@ -350,8 +350,8 @@ public class MultiblockVisualizationHandler {
 	/**
 	 * Returns the Rotation of a multiblock structure based on the given entity's facing direction.
 	 */
-	private static Rotation getRotation(Entity entity) {
-		return RotationUtil.rotationFromFacing(Direction.byHorizontalIndex(MathHelper.floor((double) (-entity.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3));
+	private static BlockRotation getBlockRotation(Entity entity) {
+		return BlockRotationUtil.BlockRotationFromFacing(Direction.byHorizontalIndex(MathHelper.floor((double) (-entity.BlockRotationYaw * 4.0F / 360.0F) + 0.5D) & 3));
 	}
 
 }

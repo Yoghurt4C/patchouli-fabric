@@ -8,7 +8,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.JsonToNBT;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 import net.minecraftforge.registries.ForgeRegistries;
 import vazkii.patchouli.common.base.Patchouli;
@@ -17,7 +17,7 @@ public class EntityUtil {
 
 	public static String getEntityName(String entityId) {
 		Pair<String, String> nameAndNbt = splitNameAndNBT(entityId);
-		EntityType<?> type = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(nameAndNbt.getLeft()));
+		EntityType<?> type = ForgeRegistries.ENTITIES.getValue(new Identifier(nameAndNbt.getLeft()));
 
 		return type.getTranslationKey();
 	}
@@ -36,7 +36,7 @@ public class EntityUtil {
 			}
 		}
 
-		ResourceLocation key = new ResourceLocation(entityId);
+		Identifier key = new Identifier(entityId);
 		if (!ForgeRegistries.ENTITIES.containsKey(key)) {
 			throw new RuntimeException("Unknown entity id: " + entityId);
 		}
