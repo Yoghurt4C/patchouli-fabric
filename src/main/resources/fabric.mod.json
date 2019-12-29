@@ -1,20 +1,21 @@
 {
   "schemaVersion": 1,
-  "id": "modid",
+  "id": "patchouli",
   "version": "${version}",
 
-  "name": "Example Mod",
-  "description": "This is an example description! Tell everyone what your mod is about!",
+  "name": "Patchouli",
+  "description": "Unofficial Fabric port of Patchouli",
   "authors": [
-    "Me!"
+    "Vazkii",
+    "williewillus"
   ],
   "contact": {
     "homepage": "https://fabricmc.net/",
     "sources": "https://github.com/FabricMC/fabric-example-mod"
   },
 
-  "license": "CC0-1.0",
-  "icon": "assets/modid/icon.png",
+  "license": "CC BY-NC-SA 3.0",
+  "icon": "assets/patchouli/icon.png",
 
   "environment": "*",
   "entrypoints": {
@@ -30,8 +31,5 @@
     "fabricloader": ">=0.7.2",
     "fabric": "*",
     "minecraft": "1.15.x"
-  },
-  "suggests": {
-    "flamingo": "*"
   }
 }

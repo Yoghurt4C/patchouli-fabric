@@ -1,0 +1,26 @@
+{
+    "include": [
+        {
+            "template": "include/recipetest",
+            "as": "recipe1",
+            "using": {
+                "recipe": "#foo" 
+            }
+        },
+        {
+            "template": "include/recipetest",
+            "as": "recipe2",
+            "using": {
+                "recipe": "#bar"
+            },
+            "y": 70
+        }
+    ],
+    "components": [
+        {
+            "type": "header",
+            "text": "Two Recipes!",
+            "x": -1
+        }
+    ]
+}
