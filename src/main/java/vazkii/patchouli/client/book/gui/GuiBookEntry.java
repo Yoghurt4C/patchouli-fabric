@@ -7,13 +7,12 @@ import java.util.Map;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.button.Button;
+import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.recipe.Ingredient;
 import net.minecraft.util.Identifier;
 import vazkii.patchouli.api.IComponentRenderContext;
 import vazkii.patchouli.client.base.PersistentData;
@@ -28,7 +27,7 @@ public class GuiBookEntry extends GuiBook implements IComponentRenderContext {
 	BookEntry entry;
 	BookPage leftPage, rightPage;
 
-	Map<Button, Runnable> customButtons = new HashMap<>();
+	Map<ButtonWidget, Runnable> customButtons = new HashMap<>();
 
 	public GuiBookEntry(Book book, BookEntry entry) {
 		this(book, entry, 0);
@@ -230,7 +229,7 @@ public class GuiBookEntry extends GuiBook implements IComponentRenderContext {
 
 	@Override
 	public void renderIngredient(int x, int y, int mouseX, int mouseY, Ingredient ingr) {
-		ItemStack[] stacks = ingr.getMatchingStacks();
+		ItemStack[] stacks = ingr.getMatchingStacksClient();
 		if(stacks.length > 0)
 			renderItemStack(x, y, mouseX, mouseY, stacks[(ticksInBook / 20) % stacks.length]);
 	}
@@ -246,7 +245,7 @@ public class GuiBookEntry extends GuiBook implements IComponentRenderContext {
 	}
 
 	@Override
-	public void registerButton(Button button, int pageNum, Runnable onClick) {
+	public void registerButton(ButtonWidget button, int pageNum, Runnable onClick) {
 		button.x += bookLeft + ((pageNum % 2) == 0 ? LEFT_PAGE_X : RIGHT_PAGE_X);
 		button.y += bookTop;
 

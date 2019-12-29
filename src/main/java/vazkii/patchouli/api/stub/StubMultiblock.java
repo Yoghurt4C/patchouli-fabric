@@ -54,7 +54,7 @@ public class StubMultiblock implements IMultiblock {
 
 	@Override
 	public Pair<BlockPos, Collection<SimulateResult>> simulate(World world, BlockPos anchor, BlockRotation BlockRotation, boolean forView) {
-		return Pair.of(BlockPos.ZERO, Collections.emptyList());
+		return Pair.of(BlockPos.ORIGIN, Collections.emptyList());
 	}
 
 	@Override

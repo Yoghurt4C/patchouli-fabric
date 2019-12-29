@@ -6,15 +6,15 @@ import java.util.Map;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.recipe.Ingredient;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import vazkii.patchouli.api.stub.StubPatchouliAPI;
 
 public class PatchouliAPI {

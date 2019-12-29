@@ -28,7 +28,7 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.config.GuiUtils;
-import vazkii.patchouli.api.BookDrawScreenEvent;
+import vazkii.patchouli.api.BookDrawScreenCallback;
 import vazkii.patchouli.client.base.ClientTicker;
 import vazkii.patchouli.client.base.PersistentData;
 import vazkii.patchouli.client.base.PersistentData.DataHolder.BookData.Bookmark;
@@ -133,7 +133,7 @@ public abstract class GuiBook extends Screen {
 
 		super.render(mouseX, mouseY, partialTicks);
 
-		MinecraftForge.EVENT_BUS.post(new BookDrawScreenEvent(this, this.book.resourceLoc, mouseX, mouseY, partialTicks));
+		MinecraftForge.EVENT_BUS.post(new BookDrawScreenCallback(this, this.book.resourceLoc, mouseX, mouseY, partialTicks));
 
 		drawTooltip(mouseX, mouseY);
 	}

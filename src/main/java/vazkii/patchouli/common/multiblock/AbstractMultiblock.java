@@ -10,7 +10,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.BlockRotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.world.BlockView;
 import net.minecraft.world.IEnviromentBlockReader;
 import net.minecraft.world.LightType;
 import net.minecraft.world.World;
@@ -111,7 +111,7 @@ public abstract class AbstractMultiblock implements IMultiblock, IEnviromentBloc
 
         return sim.getSecond().stream().allMatch(r -> {
             BlockPos checkPos = r.getWorldPosition();
-            TriPredicate<IBlockReader, BlockPos, BlockState> pred = r.getStateMatcher().getStatePredicate();
+            TriPredicate<BlockView, BlockPos, BlockState> pred = r.getStateMatcher().getStatePredicate();
             BlockState state = world.getBlockState(checkPos).rotate(BlockRotationUtil.fixHorizontal(BlockRotation));
 
             return pred.test(world, checkPos, state);

@@ -7,7 +7,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.world.BlockView;
 import net.minecraftforge.common.util.TriPredicate;
 import vazkii.patchouli.api.IStateMatcher;
 
@@ -17,9 +17,9 @@ public class StateMatcher implements IStateMatcher {
 	public static final StateMatcher AIR = fromPredicate(Blocks.AIR.getDefaultState(), (w, p, s) -> s.isAir(w, p));
 
 	private final BlockState displayState;
-	private final TriPredicate<IBlockReader, BlockPos, BlockState> statePredicate;
+	private final TriPredicate<BlockView, BlockPos, BlockState> statePredicate;
 
-	private StateMatcher(BlockState displayState, TriPredicate<IBlockReader, BlockPos, BlockState> statePredicate) {
+	private StateMatcher(BlockState displayState, TriPredicate<BlockView, BlockPos, BlockState> statePredicate) {
 		this.displayState = displayState;
 		this.statePredicate = statePredicate;
 	}
@@ -32,11 +32,11 @@ public class StateMatcher implements IStateMatcher {
 		return fromPredicate(display.getDefaultState(), predicate);
 	}
 
-	public static StateMatcher fromPredicate(BlockState display, TriPredicate<IBlockReader, BlockPos, BlockState> predicate) {
+	public static StateMatcher fromPredicate(BlockState display, TriPredicate<BlockView, BlockPos, BlockState> predicate) {
 		return new StateMatcher(display, predicate);
 	}
 
-	public static StateMatcher fromPredicate(Block display, TriPredicate<IBlockReader, BlockPos, BlockState> predicate) {
+	public static StateMatcher fromPredicate(Block display, TriPredicate<BlockView, BlockPos, BlockState> predicate) {
 		return new StateMatcher(display.getDefaultState(), predicate);
 	}
 
@@ -72,7 +72,7 @@ public class StateMatcher implements IStateMatcher {
 	}
 
 	@Override
-	public TriPredicate<IBlockReader, BlockPos, BlockState> getStatePredicate() {
+	public TriPredicate<BlockView, BlockPos, BlockState> getStatePredicate() {
 		return statePredicate;
 	}
 

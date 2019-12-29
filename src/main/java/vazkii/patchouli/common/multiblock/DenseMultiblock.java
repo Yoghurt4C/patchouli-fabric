@@ -7,7 +7,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.util.BlockRotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.TriPredicate;
 import vazkii.patchouli.api.IStateMatcher;
@@ -53,7 +53,7 @@ public class DenseMultiblock extends AbstractMultiblock {
 			return false;
 		}
 		BlockPos checkPos = start.add(BlockRotationUtil.x(BlockRotation, x, z), y, BlockRotationUtil.z(BlockRotation, x, z));
-		TriPredicate<IBlockReader, BlockPos, BlockState> pred = stateTargets[x][y][z].getStatePredicate();
+		TriPredicate<BlockView, BlockPos, BlockState> pred = stateTargets[x][y][z].getStatePredicate();
 		BlockState state = world.getBlockState(checkPos).rotate(BlockRotationUtil.fixHorizontal(BlockRotation));
 
 		return pred.test(world, checkPos, state);

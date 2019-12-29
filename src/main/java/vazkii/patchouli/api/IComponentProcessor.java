@@ -1,8 +1,8 @@
 package vazkii.patchouli.api;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 /**
  * Implement this on a class designed to process a template and the variables bound 

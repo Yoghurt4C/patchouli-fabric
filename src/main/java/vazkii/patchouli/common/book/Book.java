@@ -18,7 +18,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.forgespi.language.IModInfo;
 import net.minecraftforge.common.MinecraftForge;
-import vazkii.patchouli.api.BookContentsReloadEvent;
+import vazkii.patchouli.api.BookContentsReloadCallback;
 import vazkii.patchouli.client.book.BookContents;
 import vazkii.patchouli.client.book.BookEntry;
 import vazkii.patchouli.client.book.ExternalBookContents;
@@ -214,7 +214,7 @@ public class Book {
 	
 		if(!isExtension) {
 			contents.reload(false);
-			MinecraftForge.EVENT_BUS.post(new BookContentsReloadEvent(this.bookResource));
+			MinecraftForge.EVENT_BUS.post(new BookContentsReloadCallback(this.bookResource));
 		}
 	}
 	
@@ -238,7 +238,7 @@ public class Book {
 			}
 			
 			contents.reload(true);
-			MinecraftForge.EVENT_BUS.post(new BookContentsReloadEvent(this.bookResource));
+			MinecraftForge.EVENT_BUS.post(new BookContentsReloadCallback(this.bookResource));
 		}
 	}
 	

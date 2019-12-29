@@ -10,7 +10,7 @@ import net.minecraft.state.IProperty;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.Tag;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.world.BlockView;
 import net.minecraftforge.common.util.TriPredicate;
 import vazkii.patchouli.api.IStateMatcher;
 
@@ -55,7 +55,7 @@ public class StringStateMatcher {
         }
 
         @Override
-        public TriPredicate<IBlockReader, BlockPos, BlockState> getStatePredicate() {
+        public TriPredicate<BlockView, BlockPos, BlockState> getStatePredicate() {
             return (w, p, s) -> state.getBlock() == s.getBlock() && checkProps(s);
         }
 
@@ -104,7 +104,7 @@ public class StringStateMatcher {
         }
 
         @Override
-        public TriPredicate<IBlockReader, BlockPos, BlockState> getStatePredicate() {
+        public TriPredicate<BlockView, BlockPos, BlockState> getStatePredicate() {
             return (w, p, s) -> tag.contains(s.getBlock()) && checkProps(s);
         }
 
