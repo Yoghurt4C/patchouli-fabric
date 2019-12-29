@@ -7,10 +7,10 @@ import java.util.Map;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 
-import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.util.Identifier;
@@ -149,7 +149,7 @@ public class GuiBookEntry extends GuiBook implements IComponentRenderContext {
 
 	@Override
 	public boolean canBeOpened() {
-		return !entry.isLocked() && !equals(Minecraft.getInstance().currentScreen);
+		return !entry.isLocked() && !equals(MinecraftClient.getInstance().currentScreen);
 	}
 
 	@Override
@@ -209,7 +209,7 @@ public class GuiBookEntry extends GuiBook implements IComponentRenderContext {
 	}
 
 	@Override
-	public FontRenderer getFont() {
+	public TextRenderer getFont() {
 		return book.getFont();
 	}
 
@@ -219,8 +219,9 @@ public class GuiBookEntry extends GuiBook implements IComponentRenderContext {
 			return;
 
 		RenderHelper.enableGUIStandardItemLighting();
-		minecraft.getItemRenderer().renderItemAndEffectIntoGUI(stack, x, y);
-		minecraft.getItemRenderer().renderItemOverlays(font, stack, x, y);
+
+		minecraft.getItemRenderer().renderGuiItem(stack, x, y);
+		minecraft.getItemRenderer().renderGuiItemOverlay(font, stack, x, y);
 
 		if(isMouseInRelativeRange(mouseX, mouseY, x, y, 16, 16))
 			setTooltipStack(stack);

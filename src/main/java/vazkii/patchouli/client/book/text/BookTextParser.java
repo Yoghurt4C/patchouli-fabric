@@ -10,6 +10,7 @@ import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.options.KeyBinding;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.client.util.TextFormat;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import vazkii.patchouli.client.book.BookEntry;
 import vazkii.patchouli.client.book.gui.GuiBook;
@@ -214,7 +215,7 @@ public class BookTextParser {
 		String result = "";
 
 		if (cmd.length() == 1 && cmd.matches("^[0123456789abcdef]$")) { // Vanilla colors
-			state.color = TextFormat.fromFormattingCode(cmd.charAt(0)).getColor();
+			state.color = Formatting.byCode(cmd.charAt(0)).getColorIndex();
 			return "";
 		}
 		else if(cmd.startsWith("#") && (cmd.length() == 4 || cmd.length() == 7)) { // Hex colors

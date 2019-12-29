@@ -12,17 +12,17 @@ public class PatchouliSounds {
 	public static void preInit() {
 		book_open = register("book_open");
 		book_flip = register("book_flip");
-		
+
 		MinecraftForge.EVENT_BUS.register(PatchouliSounds.class);
 	}
-	
+
 	public static SoundEvent register(String name) {
 		Identifier loc = new Identifier(Patchouli.MOD_ID, name);
 		SoundEvent e = new SoundEvent(loc).setRegistryName(loc);
-		
+
 		return e;
 	}
-	
+
 	@SubscribeEvent
 	public static void register(RegistryEvent.Register<SoundEvent> event) {
 		event.getRegistry().register(book_open);

@@ -7,7 +7,16 @@ import java.util.WeakHashMap;
 
 import javax.annotation.Nonnull;
 
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.render.BufferBuilder;
+import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.render.Tessellator;
+import net.minecraft.client.render.block.BlockRenderManager;
+import net.minecraft.client.render.block.entity.BlockEntityRenderDispatcher;
+import net.minecraft.client.render.model.BakedModel;
+import net.minecraft.client.texture.Sprite;
+import net.minecraft.client.texture.SpriteAtlasTexture;
 import net.minecraft.client.util.math.Matrix4f;
 import net.minecraft.client.util.math.Vector4f;
 import net.minecraft.util.math.Vec3i;
@@ -87,7 +96,7 @@ public class PageMultiblock extends PageWithText {
 		int x = GuiBook.PAGE_WIDTH / 2 - 53;
 		int y = 7;
 		GlStateManager.enableBlend();
-		GlStateManager.color3f(1F, 1F, 1F);
+		GlStateManager.color4f(1F, 1F, 1F,1f);
 		GuiBook.drawFromTexture(book, x, y, 405, 149, 106, 106);
 		
 		parent.drawCenteredStringNoShadow(name, GuiBook.PAGE_WIDTH / 2, 0, book.headerColor);
@@ -163,30 +172,30 @@ public class PageMultiblock extends PageWithText {
 		GlStateManager.color4f(1F, 1F, 1F, 1F);
 		GlStateManager.translatef(0, 0, -1);
 
-		TileEntityRendererDispatcher.staticPlayerX = eye.x;
-		TileEntityRendererDispatcher.staticPlayerY = eye.y;
-		TileEntityRendererDispatcher.staticPlayerZ = eye.z;
+		BlockEntityRendererDispatcher.staticPlayerX = eye.x;
+		BlockEntityRendererDispatcher.staticPlayerY = eye.y;
+		BlockEntityRendererDispatcher.staticPlayerZ = eye.z;
 
-		BlockRenderLayer oldRenderLayer = MinecraftForgeClient.getRenderLayer();
-		for (BlockRenderLayer layer : BlockRenderLayer.values()) {
-			if (layer == BlockRenderLayer.TRANSLUCENT) {
-				doTileEntityRenderPass(mb, blocks, 0);
+		RenderLayer oldRenderLayer = MinecraftForgeClient.getRenderLayer();
+		for (RenderLayer layer : RenderLayer.getBlockLayers()) {
+			if (layer == RenderLayer.getTranslucent()) {
+				doBlockEntityRenderPass(mb, blocks, 0);
 			}
 			doWorldRenderPass(mb, blocks, layer, eye);
-			if (layer == BlockRenderLayer.TRANSLUCENT) {
-				doTileEntityRenderPass(mb, blocks, 1);
+			if (layer == RenderLayer.getTranslucent()) {
+				doBlockEntityRenderPass(mb, blocks, 1);
 			}
 		}
 		ForgeHooksClient.setRenderLayer(oldRenderLayer);
 
 		setGlStateForPass(0);
-		mc.getTextureManager().getTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE).restoreLastBlurMipmap();
+		mc.getTextureManager().getTexture(SpriteAtlasTexture.BLOCK_ATLAS_TEX);
 		GlStateManager.popMatrix();
 	}
 
-	private void doWorldRenderPass(AbstractMultiblock mb, Iterable<? extends BlockPos> blocks, final @Nonnull BlockRenderLayer layer, Vector4f eye) {
-		mc.textureManager.bindTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
-		mc.getTextureManager().getTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE).setBlurMipmap(false, false);
+	private void doWorldRenderPass(AbstractMultiblock mb, Iterable<? extends BlockPos> blocks, final @Nonnull RenderLayer layer, Vector4f eye) {
+		mc.getTextureManager().bindTexture(SpriteAtlasTexture.BLOCK_ATLAS_TEX);
+		mc.getTextureManager().getTexture(SpriteAtlasTexture.BLOCK_ATLAS_TEX).setFilter(false, false);
 		
 		ForgeHooksClient.setRenderLayer(layer);
 		setGlStateForPass(layer);
@@ -202,7 +211,7 @@ public class PageMultiblock extends PageWithText {
 			}
 		}
 
-		if (layer == BlockRenderLayer.TRANSLUCENT) {
+		if (layer == RenderLayer.getTranslucent()) {
 			wr.sortVertexData(eye.x, eye.y, eye.z);
 		}
 		Tessellator.getInstance().draw();
@@ -211,15 +220,15 @@ public class PageMultiblock extends PageWithText {
 	public void renderBlock(@Nonnull BlockState state, @Nonnull BlockPos pos, @Nonnull AbstractMultiblock mb, @Nonnull BufferBuilder bufferBuilder) {
 
 		try {
-			BlockRendererDispatcher blockrendererdispatcher = mc.getBlockRendererDispatcher();
+			BlockRenderManager blockRenderManager = mc.getBlockRenderManager();
 			BlockRenderType type = state.getRenderType();
 			if (type != BlockRenderType.MODEL) {
 				return;
 			}
 
 			// We only want to change one param here, the check sides
-			IBakedModel ibakedmodel = blockrendererdispatcher.getModelForState(state);
-			blockrendererdispatcher.getBlockModelRenderer().renderModel(mb, ibakedmodel, state, pos, bufferBuilder, false, random,  state.getPositionRandom(pos), EmptyModelData.INSTANCE);
+			BakedModel bakedmodel = blockRenderManager.getModel(state);
+			blockRenderManager.getModelRenderer().render(mb, bakedmodel, state, pos, bufferBuilder, false, random,  state.getRenderingSeed(pos), EmptyModelData.INSTANCE);
 
 		} catch (Exception e) {
 			throw new RuntimeException(e);
@@ -227,9 +236,9 @@ public class PageMultiblock extends PageWithText {
 	}
 	
 	// Hold errored TEs weakly, this may cause some dupe errors but will prevent spamming it every frame
-	private final transient Set<TileEntity> erroredTiles = Collections.newSetFromMap(new WeakHashMap<>());
+	private final transient Set<BlockEntity> erroredBEs = Collections.newSetFromMap(new WeakHashMap<>());
 
-	private void doTileEntityRenderPass(AbstractMultiblock mb, Iterable<? extends BlockPos> blocks, final int pass) {
+	private void doBlockEntityRenderPass(AbstractMultiblock mb, Iterable<? extends BlockPos> blocks, final int pass) {
 		mb.setWorld(mc.world);
 		
 		RenderHelper.enableStandardItemLighting();
@@ -238,17 +247,17 @@ public class PageMultiblock extends PageWithText {
 		setGlStateForPass(1);
 		
 		for (BlockPos pos : blocks) {
-			TileEntity te = mb.getTileEntity(pos);
+			BlockEntity be = mb.getBlockEntity(pos);
 			BlockPos relPos = new BlockPos(mc.player);
-			if (te != null && !erroredTiles.contains(te)) {
-				te.setWorld(mc.world);
-				te.setPos(relPos.add(pos));
+			if (be != null && !erroredBEs.contains(be)) {
+				be.setWorld(mc.world.getWorld(), pos);
+				be.setPos(relPos.add(pos));
 
 				try {
-					TileEntityRendererDispatcher.instance.render(te, pos.getX(), pos.getY(), pos.getZ(), ClientTicker.partialTicks);
+					BlockEntityRenderDispatcher.INSTANCE.render(be, pos.getX(), pos.getY(), pos.getZ(), ClientTicker.partialTicks);
 				} catch (Exception e) {
-					erroredTiles.add(te);
-					Patchouli.LOGGER.error("An exception occured rendering tile entity", e);
+					erroredBEs.add(be);
+					Patchouli.LOGGER.error("An exception occured rendering block entity", e);
 				}
 			}
 		}
@@ -256,13 +265,13 @@ public class PageMultiblock extends PageWithText {
 		RenderHelper.disableStandardItemLighting();
 	}
 
-	private void setGlStateForPass(@Nonnull BlockRenderLayer layer) {
-		int pass = layer == BlockRenderLayer.TRANSLUCENT ? 1 : 0;
+	private void setGlStateForPass(@Nonnull RenderLayer layer) {
+		int pass = layer == RenderLayer.getTranslucent() ? 1 : 0;
 		setGlStateForPass(pass);
 	}
 
 	private void setGlStateForPass(int layer) {
-		GlStateManager.color3f(1, 1, 1);
+		GlStateManager.color4f(1, 1, 1,1);
 
 		if (layer == 0) {
 			GlStateManager.enableDepthTest();

@@ -59,7 +59,7 @@ public class PageEntity extends PageWithText {
 		int x = GuiBook.PAGE_WIDTH / 2 - 53;
 		int y = 7;
 		GlStateManager.enableBlend();
-		GlStateManager.color3f(1F, 1F, 1F);
+		GlStateManager.color4f(1F, 1F, 1F,1f);
 		GuiBook.drawFromTexture(book, x, y, 405, 149, 106, 106);
 
 		parent.drawCenteredStringNoShadow(name, GuiBook.PAGE_WIDTH / 2, 0, book.headerColor);
@@ -82,7 +82,7 @@ public class PageEntity extends PageWithText {
 
 		GlStateManager.enableColorMaterial();
 		GlStateManager.pushMatrix();
-		GlStateManager.color3f(1F, 1F, 1F);		
+		GlStateManager.color4f(1F, 1F, 1F,1f);
 		GlStateManager.translatef(x, y, 50.0F);
 		GlStateManager.scalef(-renderScale, renderScale, renderScale);
 		GlStateManager.translatef(0F, offset, 0F);

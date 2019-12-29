@@ -1,6 +1,6 @@
 package vazkii.patchouli.common.network.message;
 
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.fabricmc.fabric.api.network.PacketContext;
 import vazkii.patchouli.client.base.ClientAdvancements;
 import vazkii.patchouli.common.network.IMessage;
 
@@ -19,8 +19,8 @@ public class MessageSyncAdvancements implements IMessage {
 	}
 	
 	@Override
-	public boolean receive(NetworkEvent.Context context) {
-		context.enqueueWork(() -> {
+	public boolean receive(PacketContext context) {
+		context.getTaskQueue().execute(() -> {
 			ClientAdvancements.setDoneAdvancements(done, showToast, false);
 		});
 		

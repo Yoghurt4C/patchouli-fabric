@@ -39,7 +39,7 @@ public class PageImage extends PageWithText {
 		
 		int x = GuiBook.PAGE_WIDTH / 2 - 53;
 		int y = 7;
-		GlStateManager.color3f(1F, 1F, 1F);
+		GlStateManager.color4f(1F, 1F, 1F,1f);
 		GlStateManager.enableBlend();
 		GlStateManager.scalef(0.5F, 0.5F, 0.5F);
 		parent.blit(x * 2 + 6, y * 2 + 6, 0, 0, 200, 200);

@@ -3,7 +3,9 @@ package vazkii.patchouli.common.multiblock;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.BlockRotation;
@@ -23,7 +25,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class AbstractMultiblock implements IMultiblock, IEnviromentBlockReader {
+public abstract class AbstractMultiblock implements IMultiblock, BlockView {
     public Identifier res;
     protected int offX, offY, offZ;
     protected int viewOffX, viewOffY, viewOffZ;
@@ -126,26 +128,16 @@ public abstract class AbstractMultiblock implements IMultiblock, IEnviromentBloc
     }
 
     @Override
-    @Nullable
-    public TileEntity getTileEntity(BlockPos pos) {
-        BlockState state = getBlockState(pos);
-        if (state.getBlock().hasTileEntity(state)) {
-            return teCache.computeIfAbsent(pos.toImmutable(), p -> state.getBlock().createTileEntity(state, world));
-        }
-        return null;
-    }
-
-    @Override
-    public IFluidState getFluidState(BlockPos pos) {
+    public FluidState getFluidState(BlockPos pos) {
         return Fluids.EMPTY.getDefaultState();
     }
 
-    @Override
+    //@Override
     public Biome getBiome(BlockPos pos) {
         return Biomes.PLAINS;
     }
 
-    @Override
+    //@Override
     public int getLightFor(LightType type, BlockPos pos) {
         return 0xF000F0;
     }

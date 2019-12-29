@@ -127,7 +127,7 @@ public abstract class GuiBook extends Screen {
 
 		GlStateManager.pushMatrix();
 		GlStateManager.translatef(bookLeft, bookTop, 0);
-		GlStateManager.color3f(1F, 1F, 1F);
+		GlStateManager.color4f(1F, 1F, 1F,1F);
 		drawBackgroundElements(mouseX, mouseY, partialTicks);
 		drawForegroundElements(mouseX, mouseY, partialTicks);
 		GlStateManager.popMatrix();
@@ -467,7 +467,7 @@ public abstract class GuiBook extends Screen {
 		GlStateManager.color4f(1F, 1F, 1F, alpha);
 		drawFromTexture(book, x, y, state.u, 197, 8, 8);
 		GlStateManager.enableAlphaTest();
-		GlStateManager.color3f(1F, 1F, 1F);
+		GlStateManager.color4f(1F, 1F, 1F,1F);
 	}
 
 	public static void drawPageFiller(Book book) {

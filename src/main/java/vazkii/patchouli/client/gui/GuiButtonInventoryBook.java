@@ -3,12 +3,9 @@ package vazkii.patchouli.client.gui;
 import com.mojang.blaze3d.platform.GlStateManager;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.AbstractGui;
+import net.minecraft.client.gui.widget.AbstractButtonWidget;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import vazkii.patchouli.client.book.BookContents;
@@ -36,7 +33,7 @@ public class GuiButtonInventoryBook extends ButtonWidget {
 		RenderSystem.color3f(1F, 1F, 1F);
 		
 		boolean hovered = mouseX >= x && mouseY >= y && mouseX < x + width && mouseY < y + height;
-		AbstractGui.blit(x, y, (hovered ? 20 : 0), 0, width, height, 64, 64);
+		AbstractButtonWidget.blit(x, y, (hovered ? 20 : 0), 0, width, height, 64, 64);
 		
 		ItemStack stack = book.getBookItem();
 		RenderHelper.enableGUIStandardItemLighting();

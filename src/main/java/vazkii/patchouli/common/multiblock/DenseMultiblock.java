@@ -4,6 +4,7 @@ import com.mojang.datafixers.util.Pair;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.util.BlockRotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
@@ -24,6 +25,7 @@ public class DenseMultiblock extends AbstractMultiblock {
 	private final String[][] pattern;
 	private IStateMatcher[][][] stateTargets;
 	private final Vec3i size;
+	private BlockEntity blockEntity;
 
 	public DenseMultiblock(String[][] pattern, Object... targets) {
 		this.pattern = pattern;
@@ -135,6 +137,9 @@ public class DenseMultiblock extends AbstractMultiblock {
 
 		return new int[] { pattern.length, expectedLenX, expectedLenZ };
 	}
+
+	@Override
+	public BlockEntity getBlockEntity(BlockPos pos) {return blockEntity;};
 
     @Override
     public BlockState getBlockState(BlockPos pos) {

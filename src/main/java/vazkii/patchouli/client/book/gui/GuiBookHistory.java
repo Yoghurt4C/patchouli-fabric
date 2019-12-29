@@ -3,7 +3,7 @@ package vazkii.patchouli.client.book.gui;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-import net.minecraft.client.resources.I18n;
+import net.minecraft.client.resource.language.I18n;
 import net.minecraft.util.Identifier;
 import vazkii.patchouli.client.base.PersistentData;
 import vazkii.patchouli.client.base.PersistentData.DataHolder.BookData;
@@ -18,12 +18,12 @@ public class GuiBookHistory extends GuiBookEntryList {
 
 	@Override
 	protected String getName() {
-		return I18n.format("patchouli.gui.lexicon.history");
+		return I18n.translate("patchouli.gui.lexicon.history");
 	}
 
 	@Override
 	protected String getDescriptionText() {
-		return I18n.format("patchouli.gui.lexicon.history.info");
+		return I18n.translate("patchouli.gui.lexicon.history.info");
 	}
 	
 	@Override

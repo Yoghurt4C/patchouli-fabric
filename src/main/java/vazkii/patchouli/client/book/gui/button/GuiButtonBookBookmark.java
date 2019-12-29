@@ -44,7 +44,7 @@ public class GuiButtonBookBookmark extends GuiButtonBook {
 			String s = Integer.toString(bookmark.page + 1);
 			if(multiblock)
 				s = I18n.translate("patchouli.gui.lexicon.visualize_letter");
-			parent.getMinecraft().fontRenderer.drawStringWithShadow(s, px + 12, py + 10, 0xFFFFFF);
+			parent.getMinecraft().textRenderer.drawWithShadow(s, px + 12, py + 10, 0xFFFFFF);
 			GlStateManager.enableDepthTest();
 			GlStateManager.popMatrix();
 		}
