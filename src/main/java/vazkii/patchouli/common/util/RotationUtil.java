@@ -1,9 +1,9 @@
 package vazkii.patchouli.common.util;
 
-import net.minecraft.util.Direction;
 import net.minecraft.util.BlockRotation;
+import net.minecraft.util.math.Direction;
 
-public class BlockRotationUtil {
+public class RotationUtil {
 
 	public static int x(BlockRotation rot, int x, int z) {
 		switch(rot) {
@@ -23,7 +23,7 @@ public class BlockRotationUtil {
 		}
 	}
 	
-	public static BlockRotation BlockRotationFromFacing(Direction facing) {
+	public static BlockRotation rotationFromFacing(Direction facing) {
 		switch(facing) {
 		case EAST: return BlockRotation.CLOCKWISE_90;
 		case SOUTH: return BlockRotation.CLOCKWISE_180;

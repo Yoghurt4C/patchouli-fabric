@@ -15,7 +15,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import com.google.common.base.Function;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
@@ -41,7 +41,7 @@ public class MessageSerializer {
 		mapHandler(BlockPos.class, PacketBuffer::readBlockPos, PacketBuffer::writeBlockPos);
 		mapHandler(ITextComponent.class, PacketBuffer::readTextComponent, PacketBuffer::writeTextComponent);
 		mapHandler(UUID.class, PacketBuffer::readUniqueId, PacketBuffer::writeUniqueId);
-		mapHandler(CompoundNBT.class, PacketBuffer::readCompoundTag, PacketBuffer::writeCompoundTag);
+		mapHandler(CompoundTag.class, PacketBuffer::readCompoundTag, PacketBuffer::writeCompoundTag);
 		mapHandler(ItemStack.class, PacketBuffer::readItemStack, MessageSerializer::writeItemStack);
 		mapHandler(String.class, MessageSerializer::readString, MessageSerializer::writeString);
 		mapHandler(Identifier.class, PacketBuffer::readIdentifier, PacketBuffer::writeIdentifier);

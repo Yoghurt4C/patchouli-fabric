@@ -1,12 +1,13 @@
 package vazkii.patchouli.common.util;
 
+import net.minecraft.util.registry.Registry;
 import org.apache.commons.lang3.tuple.Pair;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.JsonToNBT;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
@@ -17,7 +18,7 @@ public class EntityUtil {
 
 	public static String getEntityName(String entityId) {
 		Pair<String, String> nameAndNbt = splitNameAndNBT(entityId);
-		EntityType<?> type = ForgeRegistries.ENTITIES.getValue(new Identifier(nameAndNbt.getLeft()));
+		EntityType<?> type = Registry.ENTITY_TYPE.get(new Identifier(nameAndNbt.getLeft()));
 
 		return type.getTranslationKey();
 	}
@@ -26,7 +27,7 @@ public class EntityUtil {
 		Pair<String, String> nameAndNbt = splitNameAndNBT(entityId);
 		entityId = nameAndNbt.getLeft();
 		String nbtStr = nameAndNbt.getRight();
-		CompoundNBT nbt = null;
+		CompoundTag nbt = null;
 		
 		if(!nbtStr.isEmpty()) {
 			try {
@@ -41,7 +42,7 @@ public class EntityUtil {
 			throw new RuntimeException("Unknown entity id: " + entityId);
 		}
 		EntityType<?> type = ForgeRegistries.ENTITIES.getValue(key);
-		final CompoundNBT useNbt = nbt;
+		final CompoundTag useNbt = nbt;
 		final String useId = entityId;
 		return (world) -> {
 			Entity entity;

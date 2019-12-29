@@ -12,7 +12,7 @@ import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
@@ -81,7 +81,7 @@ public class ItemModBook extends Item {
 	public static ItemStack forBook(String book) {
 		ItemStack stack = new ItemStack(PatchouliItems.book);
 
-		CompoundNBT cmp = new CompoundNBT();
+		CompoundTag cmp = new CompoundTag();
 		cmp.putString(TAG_BOOK, book);
 		stack.setTag(cmp);
 
